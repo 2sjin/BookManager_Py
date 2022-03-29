@@ -2,8 +2,6 @@ from tkinter import *
 
 from Window_Add import Window_Add_User
 from Window_Add import Window_Add_Book
-from Window_Search import Window_Search_User
-from Window_Search import Window_Search_Book
 from Panel_Show import Panel_Show_Book
 from Panel_Show import Panel_Show_User
 
@@ -19,30 +17,11 @@ class Window_Main():
         self.window.title("도서 대여 프로그램")
         self.window.geometry('600x400')
 
-        self.load_menu()        # 멤버 메소드 호출: 메뉴 붙이기
-        self.load_panels()      # 멤버 메소드 호출: 외부 패널 붙이기
-        self.load_widgets()     # 멤버 메소드 호출: 위젯 붙이기
+        Panel_Show_User(self.window, x=10, y=20)    # 회원 정보 패널 붙이기
+        Panel_Show_Book(self.window, x=310, y=20)   # 도서 정보 패널 붙이기
+        self.load_menu()                            # 메뉴바 붙이기
 
         self.window.mainloop()
-
-    # 멤버 메소드: 위젯(외부 클래스의 객체) 생성
-    def load_panels(self):
-        Panel_Show_User(self.window, x=0, y=70)     # 회원 정보 패널 붙이기
-        Panel_Show_Book(self.window, x=250, y=70)   # 도서 정보 패널 붙이기
-
-    # 멤버 메소드: 멤버 속성(위젯) 정의하고 윈도우에 붙이기
-    def load_widgets(self):
-        self.btn_search_user = Button(self.window, text="회원 검색", command=self.load_window_search_user)
-        self.btn_search_user.place(x=0, y=30)
-
-        self.entry_search_user = Entry(self.window)
-        self.entry_search_user.place(x=70, y=35)
-
-        self.btn_search_book = Button(self.window, text="도서 검색", command=self.load_window_search_book)
-        self.btn_search_book.place(x=250, y=30)
-
-        self.entry_search_book = Entry(self.window)
-        self.entry_search_book.place(x=320, y=35)
 
     # 멤버 메소드: 윈도우 상단에 메뉴 붙이기
     def load_menu(self):
@@ -74,11 +53,4 @@ class Window_Main():
     def load_window_add_book(self):
         Window_Add_Book()
 
-    # 멤버 메소드: (이벤트) 회원 검색 결과 윈도우 띄우기
-    def load_window_search_user(self):
-        Window_Search_User()
-
-    # 멤버 메소드: (이벤트) 도서 검색 결과 윈도우 띄우기
-    def load_window_search_book(self):
-        Window_Search_Book()
 # ===========================================================================================
