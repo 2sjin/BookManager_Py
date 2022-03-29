@@ -19,6 +19,7 @@ class Window_Main():
         self.window.title("도서 대여 프로그램")
         self.window.geometry('600x400')
 
+        self.load_menu()        # 멤버 메소드 호출: 메뉴 붙이기
         self.load_panels()      # 멤버 메소드 호출: 외부 패널 붙이기
         self.load_widgets()     # 멤버 메소드 호출: 위젯 붙이기
 
@@ -31,17 +32,39 @@ class Window_Main():
 
     # 멤버 메소드: 멤버 속성(위젯) 정의하고 윈도우에 붙이기
     def load_widgets(self):
-        self.btn_add_user = Button(self.window, text="신규 회원 추가", command=self.load_window_add_user)
-        self.btn_add_user.place(x=0, y=0)
-
-        self.btn_add_book = Button(self.window, text="신규 도서 추가", command=self.load_window_add_book)
-        self.btn_add_book.place(x=250, y=0)
-
         self.btn_search_user = Button(self.window, text="회원 검색", command=self.load_window_search_user)
         self.btn_search_user.place(x=0, y=30)
 
+        self.entry_search_user = Entry(self.window)
+        self.entry_search_user.place(x=70, y=35)
+
         self.btn_search_book = Button(self.window, text="도서 검색", command=self.load_window_search_book)
         self.btn_search_book.place(x=250, y=30)
+
+        self.entry_search_book = Entry(self.window)
+        self.entry_search_book.place(x=320, y=35)
+
+    # 멤버 메소드: 윈도우 상단에 메뉴 붙이기
+    def load_menu(self):
+        # 메뉴바 추가
+        self.menubar = Menu(self.window, tearoff=0)
+        self.window.config(menu = self.menubar)
+
+        # [파일] 메뉴 추가
+        self.menu_1 = Menu(self.menubar)
+        self.menubar.add_cascade(label="파일", menu=self.menu_1)
+
+        # [파일] 메뉴의 하위 항목 추가
+        self.menu_1.add_command(label="프로그램 종료", command=quit)
+
+        # [신규 데이터 추가] 메뉴 추가
+        self.menu_2 = Menu(self.menubar)
+        self.menubar.add_cascade(label="신규 데이터 추가", menu=self.menu_2)
+
+        # [신규 데이터 추가] 메뉴의 하위 항목 추가
+        self.menu_2.add_command(label="신규 회원 추가", command=self.load_window_add_user)
+        self.menu_2.add_separator()
+        self.menu_2.add_command(label="신규 도서 추가", command=self.load_window_add_book)
 
     # 멤버 메소드: (이벤트) 신규 회원 추가 윈도우 띄우기
     def load_window_add_user(self):
