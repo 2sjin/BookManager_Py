@@ -23,7 +23,6 @@ class Panel_Show_User():
     def load_widgets(self, window, x, y):
         self.label = Label(text="[회원 정보]")
         self.label.place(x=x, y=y)
-<<<<<<< HEAD
 
         self.entry_search_user = Entry(window)
         self.entry_search_user.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
@@ -34,9 +33,6 @@ class Panel_Show_User():
     # 멤버 메소드: (이벤트) 회원 검색 결과 윈도우 띄우기
     def load_window_search_user(self):
         Window_Search_User()
-=======
-        self.user_editor = Panel_Edit_User(window, 150, 100)      # 회원 정보 입력하는 패널 붙이기
->>>>>>> b6b766a9986878042834befaef54a76c280643a5
 # ======================================================================================================================
 
 
@@ -54,7 +50,6 @@ class Panel_Show_Book():
     def load_widgets(self, window, x, y):
         self.label1 = Label(text="[도서 정보]")
         self.label1.place(x=x, y=y)
-<<<<<<< HEAD
 
         self.entry_search_book = Entry(window)
         self.entry_search_book.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
@@ -66,7 +61,4 @@ class Panel_Show_Book():
     def load_window_search_book(self):
         Window_Search_Book()
 
-=======
-        self.book_editor = Panel_Edit_Book(window,500, 100)    # 도서 정보 입력하는 패널 붙이기
->>>>>>> b6b766a9986878042834befaef54a76c280643a5
 # ======================================================================================================================
