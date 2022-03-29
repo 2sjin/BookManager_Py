@@ -1,3 +1,4 @@
+from doctest import master
 from email.mime import image
 from tkinter import *
 from tkinter.filedialog import askopenfile, askopenfilename
@@ -61,7 +62,7 @@ class Panel_Edit_User():
             filename = askopenfilename(parent=window,filetypes=(("GIF 파일","*.gif"),("모든 파일","*.*")))
             photo = Image.open(filename)
             resize_photo = photo.resize((150,150))
-            photo_tk = ImageTk.PhotoImage(resize_photo)
+            photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
             self.label_image.configure(image=photo_tk,width=120,height=150)
             self.label_image.image = photo_tk
 
