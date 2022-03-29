@@ -17,7 +17,7 @@ class Window_Main():
     def __init__(self):
         self.window = Tk()
         self.window.title("도서 대여 프로그램")
-        self.window.geometry('600x400')
+        self.window.geometry('1000x400')
 
         self.load_panels()      # 멤버 메소드 호출: 외부 패널 붙이기
         self.load_widgets()     # 멤버 메소드 호출: 위젯 붙이기
@@ -27,7 +27,7 @@ class Window_Main():
     # 멤버 메소드: 위젯(외부 클래스의 객체) 생성
     def load_panels(self):
         Panel_Show_User(self.window, x=0, y=70)     # 회원 정보 패널 붙이기
-        Panel_Show_Book(self.window, x=250, y=70)   # 도서 정보 패널 붙이기
+        Panel_Show_Book(self.window, x=500, y=70)   # 도서 정보 패널 붙이기
 
     # 멤버 메소드: 멤버 속성(위젯) 정의하고 윈도우에 붙이기
     def load_widgets(self):
@@ -41,7 +41,7 @@ class Window_Main():
         self.btn_search_user.place(x=0, y=30)
 
         self.btn_search_book = Button(self.window, text="도서 검색", command=self.load_window_search_book)
-        self.btn_search_book.place(x=250, y=30)
+        self.btn_search_book.place(x=500, y=30)
 
     # 멤버 메소드: (이벤트) 신규 회원 추가 윈도우 띄우기
     def load_window_add_user(self):

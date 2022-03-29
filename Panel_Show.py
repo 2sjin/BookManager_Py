@@ -13,7 +13,7 @@ class Panel_Show_User():
     def __init__(self, window, x, y):
         self.label = Label(text="[회원 정보]")
         self.label.place(x=x, y=y)
-        self.user_editor = Panel_Edit_User(window, 0, 100)      # 회원 정보 입력하는 패널 붙이기
+        self.user_editor = Panel_Edit_User(window, 150, 100)      # 회원 정보 입력하는 패널 붙이기
 # ======================================================================================================================
 
 
@@ -26,5 +26,5 @@ class Panel_Show_Book():
     def __init__(self, window, x, y):
         self.label1 = Label(text="[도서 정보]")
         self.label1.place(x=x, y=y)
-        self.book_editor = Panel_Edit_Book(window, 250, 100)    # 도서 정보 입력하는 패널 붙이기
+        self.book_editor = Panel_Edit_Book(window,500, 100)    # 도서 정보 입력하는 패널 붙이기
 # ======================================================================================================================

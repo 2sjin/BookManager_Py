@@ -26,6 +26,10 @@ class Panel_Edit_User():
         self.label_registration = Label(window,text="상태 : ")
         self.label_registration.place(x=x,y=y+125)
 
+        self.photo = PhotoImage(file="2.gif")
+        self.label_image = Label(window,width=50,height=100,image=self.photo)
+        self.label_image.place(x=x-150,y=y)
+
         self.entry_phone = Entry(window)
         self.entry_phone.place(x=x+60, y=y)
 
