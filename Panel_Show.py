@@ -5,7 +5,7 @@ from Panel_Edit import Panel_Edit_Book
 from Window_Search import Window_Search_User
 from Window_Search import Window_Search_Book
 
-SEARCH_ENTRY_WIDTH = 140
+SEARCH_ENTRY_WIDTH = 340
 SEARCH_BUTTON_WIDTH = 50
 SEARCH_HEIGHT = 24
 
@@ -55,7 +55,7 @@ class Panel_Show_Book():
         self.entry_search_book.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
         self.btn_search_book = Button(window, text="검색", command=self.load_window_search_book)
-        self.btn_search_book.place(x=x+150, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+        self.btn_search_book.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
 
     # 멤버 메소드: (이벤트) 도서 검색 결과 윈도우 띄우기
     def load_window_search_book(self):
