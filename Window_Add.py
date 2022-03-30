@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
@@ -19,13 +20,16 @@ class Window_Add_User():
             self.window.quit()
             self.window.destroy()
         self.user_editor = Panel_Edit_User(self.window, x=140, y=0)   # 회원 Edit 패널을 윈도우에 포함시킴
-        self.button_check = Button(self.window,text="확인",width=7)
+        self.button_check = Button(self.window,text="확인",width=7, command=self.add_user)  # [확인] 버튼 이벤트 추가
         self.button_check.place(x=240,y=180)
         self.button_cancel = Button(self.window,text="취소",width=7)
         self.button_cancel.bind("<ButtonRelease-1>",func_exit)
         self.button_cancel.place(x=320,y=180)
         
         self.window.mainloop()
+
+    def add_user(self):
+        yes_or_no = messagebox.showinfo("신규 회원 추가", "신규 회원 추가 완료(이벤트 테스트)")
 # ========================================================================================================
 
 
