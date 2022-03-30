@@ -16,7 +16,7 @@ class Panel_Show_User():
 
     # 생성자
     def __init__(self, window, x, y):
-        self.user_editor = Panel_Edit_User(window, x, 100)      # 회원 정보 입력하는 패널 붙이기
+        self.user_editor = Panel_Edit_User(window, x+135, 100)      # 회원 정보 입력하는 패널 붙이기
         self.load_widgets(window, x, y)
 
     # 멤버 메소드: 멤버 속성(위젯) 정의하고 패널에 붙이기
