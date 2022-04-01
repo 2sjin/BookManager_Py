@@ -30,6 +30,8 @@ class Window_Add_User():
 
     def add_user(self):
         yes_or_no = messagebox.showinfo("신규 회원 추가", "신규 회원 추가 완료(이벤트 테스트)")
+        self.window.quit()
+        self.window.destroy()   
 # ========================================================================================================
 
 
@@ -41,10 +43,22 @@ class Window_Add_Book():
     # 생성자
     def __init__(self):
         self.window = Tk()
-        self.window.geometry('300x100')
+        self.window.geometry('400x230')
         self.window.title("신규 도서 추가")
-
-        self.book_editor = Panel_Edit_Book(self.window, x=0, y=0)   # 도서 Edit 패널을 윈도우에 포함시킴
+        def func_exit(event):
+            self.window.quit()
+            self.window.destroy()
+        self.book_editor = Panel_Edit_Book(self.window, x=140, y=0)   # 도서 Edit 패널을 윈도우에 포함시킴
+        self.button_check = Button(self.window,text="확인",width=7, command=self.add_book)  # [확인] 버튼 이벤트 추가
+        self.button_check.place(x=240,y=195)
+        self.button_cancel = Button(self.window,text="취소",width=7)
+        self.button_cancel.bind("<ButtonRelease-1>",func_exit)
+        self.button_cancel.place(x=320,y=195)
         
-        self.window.mainloop()        
+        self.window.mainloop()
+
+    def add_book(self):
+        messagebox.showinfo("신규 도서 추가", "신규 도서 추가 완료(이벤트 테스트)")
+        self.window.quit()
+        self.window.destroy()      
 # ========================================================================================================

@@ -43,7 +43,7 @@ class Panel_Show_Book():
 
     # 생성자
     def __init__(self, window, x, y):
-        self.book_editor = Panel_Edit_Book(window, x, 100)    # 도서 정보 입력하는 패널 붙이기
+        self.book_editor = Panel_Edit_Book(window, x+135, 100)    # 도서 정보 입력하는 패널 붙이기
         self.load_widgets(window, x, y)
 
     # 멤버 메소드: 멤버 속성(위젯) 정의하고 패널에 붙이기
