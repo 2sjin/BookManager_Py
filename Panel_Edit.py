@@ -3,6 +3,8 @@ from tkinter import *
 from tkinter.filedialog import askopenfile, askopenfilename
 from PIL import Image,ImageTk
 
+ENTRY_WIDTH = 200
+
 # =======================================================================================
 # 클래스: 회원을 추가하거나 수정할 때, 회원 정보 및 이미지를 입력하는 위젯을 모아놓은 패널
 # =======================================================================================
@@ -32,16 +34,16 @@ class Panel_Edit_User():
         self.label_image.place(x=x-135,y=y-5) 
 
         self.entry_phone = Entry(window)
-        self.entry_phone.place(x=x+60, y=y)
+        self.entry_phone.place(x=x+60, y=y, width=ENTRY_WIDTH)
 
         self.entry_name = Entry(window)
-        self.entry_name.place(x=x+60, y=y+25)
+        self.entry_name.place(x=x+60, y=y+25, width=ENTRY_WIDTH)
 
         self.entry_birthday = Entry(window)
-        self.entry_birthday.place(x=x+60,y=y+50)
+        self.entry_birthday.place(x=x+60,y=y+50, width=ENTRY_WIDTH)
 
         self.entry_email = Entry(window)
-        self.entry_email.place(x=x+60,y=y+100)
+        self.entry_email.place(x=x+60,y=y+100, width=ENTRY_WIDTH)
 
         self.RadioButton_gender = IntVar()
         self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender,value=1)
@@ -101,25 +103,25 @@ class Panel_Edit_Book():
         self.label_image.place(x=x-135,y=y-5) 
 
         self.entry_isbn = Entry(window)
-        self.entry_isbn.place(x=x+60, y=y)
+        self.entry_isbn.place(x=x+60, y=y, width=ENTRY_WIDTH)
 
         self.entry_title = Entry(window)
-        self.entry_title.place(x=x+60, y=y+25)
+        self.entry_title.place(x=x+60, y=y+25, width=ENTRY_WIDTH)
 
         self.entry_author = Entry(window)
-        self.entry_author.place(x=x+60, y=y+50)
+        self.entry_author.place(x=x+60, y=y+50, width=ENTRY_WIDTH)
 
         self.entry_publisher = Entry(window)
-        self.entry_publisher.place(x=x+60, y=y+75)
+        self.entry_publisher.place(x=x+60, y=y+75, width=ENTRY_WIDTH)
 
         self.entry_price = Entry(window)
-        self.entry_price.place(x=x+60, y=y+100)
+        self.entry_price.place(x=x+60, y=y+100, width=ENTRY_WIDTH)
 
         self.entry_link = Entry(window)
-        self.entry_link.place(x=x+60, y=y+125)
+        self.entry_link.place(x=x+60, y=y+125, width=ENTRY_WIDTH)
 
         self.entry_book_explain = Entry(window)
-        self.entry_book_explain.place(x=x+60, y=y+150)
+        self.entry_book_explain.place(x=x+60, y=y+150, width=ENTRY_WIDTH)
 
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("GIF 파일","*.gif"),("모든 파일","*.*")))

@@ -10,7 +10,7 @@ SEARCH_ENTRY_WIDTH = 340
 SEARCH_BUTTON_WIDTH = 50
 SEARCH_HEIGHT = 24
 
-INFO_BUTTON_Y = 270
+INFO_BUTTON_Y = 280
 LABEL_FOR_TABLE_Y = 340
 
 # ======================================================================================================================

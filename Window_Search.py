@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
+WINDOW_GEOMETRY = '595x400'
+
 SEARCH_ENTRY_WIDTH = 460
 SEARCH_BUTTON_WIDTH = 100
 SEARCH_HEIGHT = 24
