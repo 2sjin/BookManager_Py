@@ -8,6 +8,7 @@ from Window_Search import Window_Search_Book
 SEARCH_ENTRY_WIDTH = 340
 SEARCH_BUTTON_WIDTH = 50
 SEARCH_HEIGHT = 24
+INFO_BUTTON_Y = 290
 
 # ======================================================================================================================
 # 클래스: 회원 정보 패널
@@ -29,6 +30,12 @@ class Panel_Show_User():
 
         self.btn_search_user = Button(window, text="검색", command=self.load_window_search_user)
         self.btn_search_user.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+
+        self.btn_refresh_user = Button(window, text="원래대로")
+        self.btn_refresh_user.place(x=x+240, y=INFO_BUTTON_Y, width=75)
+
+        self.btn_save_user = Button(window, text="저장")
+        self.btn_save_user.place(x=x+330, y=INFO_BUTTON_Y, width=75)
 
     # 멤버 메소드: (이벤트) 회원 검색 결과 윈도우 띄우기
     def load_window_search_user(self):
@@ -56,6 +63,21 @@ class Panel_Show_Book():
 
         self.btn_search_book = Button(window, text="검색", command=self.load_window_search_book)
         self.btn_search_book.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+
+        self.btn_delete_book = Button(window, text="삭제")
+        self.btn_delete_book.place(x=x+150, y=INFO_BUTTON_Y, width=75)
+
+        self.btn_refresh_book = Button(window, text="원래대로")
+        self.btn_refresh_book.place(x=x+240, y=INFO_BUTTON_Y, width=75)
+
+        self.btn_save_book = Button(window, text="저장")
+        self.btn_save_book.place(x=x+330, y=INFO_BUTTON_Y, width=75)
+
+      #  self.btn_refresh = Button(window, text="원래대로")
+      #  self.btn_refresh.place(x=x-200, y=260, width=75)
+
+      #  self.btn_save = Button(window, text="저장")
+      #  self.btn_save.place(x=x-110, y=260, width=75)
 
     # 멤버 메소드: (이벤트) 도서 검색 결과 윈도우 띄우기
     def load_window_search_book(self):

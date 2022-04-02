@@ -18,7 +18,7 @@ class Window_Main():
         self.window.geometry('1000x400')
 
         Panel_Show_User(self.window, x=10, y=20)    # 회원 정보 패널 붙이기
-        Panel_Show_Book(self.window, x=450, y=20)   # 도서 정보 패널 붙이기
+        Panel_Show_Book(self.window, x=475, y=20)   # 도서 정보 패널 붙이기
         self.load_menu()                            # 메뉴바 붙이기
 
         self.window.mainloop()
