@@ -15,7 +15,7 @@ class Window_Main():
     def __init__(self):
         self.window = Tk()
         self.window.title("도서 대여 프로그램")
-        self.window.geometry('1000x400')
+        self.window.geometry('900x575')
 
         Panel_Show_User(self.window, x=10, y=20)    # 회원 정보 패널 붙이기
         Panel_Show_Book(self.window, x=475, y=20)   # 도서 정보 패널 붙이기
