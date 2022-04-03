@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
@@ -7,12 +8,14 @@ from Window_Search import Window_Search_User
 from Window_Search import Window_Search_Book
 
 SEARCH_ENTRY_WIDTH = 340
-SEARCH_BUTTON_WIDTH = 50
+SEARCH_BTN_WIDTH = 50
 SEARCH_HEIGHT = 24
 
-INFO_BUTTON_Y = 280
+BTN_WIDTH = 75
+
+INFO_BTN_Y = 280
 LABEL_FOR_TABLE_Y = 340
-RENT_RETURN_BUTTEN_Y = 500
+RENT_RETURN_BTN_Y = 500
 
 # ======================================================================================================================
 # 클래스: 회원 정보 패널
@@ -33,21 +36,29 @@ class Panel_Show_User():
         self.entry_search_user = Entry(window)
         self.entry_search_user.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_search_user = Button(window, text="검색", command=self.load_window_search_user)
-        self.btn_search_user.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+        self.btn_search_user = Button(window, text="검색", command=self.event_user_search)
+        self.btn_search_user.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_refresh_user = Button(window, text="원래대로")
-        self.btn_refresh_user.place(x=x+240, y=y+INFO_BUTTON_Y, width=75)
+        self.btn_refresh_user = Button(window, text="원래대로", command=self.event_user_refresh)
+        self.btn_refresh_user.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_user = Button(window, text="저장")
-        self.btn_save_user.place(x=x+330, y=y+INFO_BUTTON_Y, width=75)
+        self.btn_save_user = Button(window, text="저장", command=self.event_user_save)
+        self.btn_save_user.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여중인 도서 목록")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
 
-    # 멤버 메소드: (이벤트) 회원 검색 결과 윈도우 띄우기
-    def load_window_search_user(self):
+    # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
+    def event_user_search(self):
         Window_Search_User()
+
+    # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
+    def event_user_refresh(self):
+        messagebox.showinfo("원래대로", "회원 정보 원래대로(이벤트 테스트)")
+
+    # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
+    def event_user_save(self):
+        messagebox.showinfo("회원 정보 수정", "회원 정보 저장 완료(이벤트 테스트)")
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
@@ -88,30 +99,26 @@ class Panel_Show_Book():
         self.entry_search_book = Entry(window)
         self.entry_search_book.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_search_book = Button(window, text="검색", command=self.load_window_search_book)
-        self.btn_search_book.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+        self.btn_search_book = Button(window, text="검색", command=self.event_book_search)
+        self.btn_search_book.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_delete_book = Button(window, text="삭제")
-        self.btn_delete_book.place(x=x+150, y=y+INFO_BUTTON_Y, width=75)
+        self.btn_delete_book = Button(window, text="삭제", command=self.event_book_delete)
+        self.btn_delete_book.place(x=x+150, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_refresh_book = Button(window, text="원래대로")
-        self.btn_refresh_book.place(x=x+240, y=y+INFO_BUTTON_Y, width=75)
+        self.btn_refresh_book = Button(window, text="원래대로", command=self.event_book_refresh)
+        self.btn_refresh_book.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="저장")
-        self.btn_save_book.place(x=x+330, y=y+INFO_BUTTON_Y, width=75)
+        self.btn_save_book = Button(window, text="저장", command=self.event_book_save)
+        self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="대여")
-        self.btn_save_book.place(x=x+240, y=y+RENT_RETURN_BUTTEN_Y, width=75)
+        self.btn_save_book = Button(window, text="대여", command=self.event_book_rent)
+        self.btn_save_book.place(x=x+240, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="반납")
-        self.btn_save_book.place(x=x+330, y=y+RENT_RETURN_BUTTEN_Y, width=75)
+        self.btn_save_book = Button(window, text="반납", command=self.event_book_return)
+        self.btn_save_book.place(x=x+330, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여 정보")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
-
-    # 멤버 메소드: (이벤트) 도서 검색 결과 윈도우 띄우기
-    def load_window_search_book(self):
-        Window_Search_Book()
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
@@ -130,4 +137,29 @@ class Panel_Show_Book():
 
         sample_value = ("01012345678", "홍길동", "2022-04-01", "2022-04-15")
         self.book_table.insert("", "end", text="", value=sample_value, iid=sample_value[0])
+
+    # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
+    def event_book_search(self):
+        Window_Search_Book()
+
+    # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
+    def event_book_delete(self):
+        messagebox.showinfo("도서 삭제", "도서 삭제 완료(이벤트 테스트)")
+
+    # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
+    def event_book_refresh(self):
+        messagebox.showinfo("원래대로", "도서 정보 원래대로(이벤트 테스트)")
+
+    # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
+    def event_book_save(self):
+        messagebox.showinfo("도서 정보 수정", "도서 정보 수정 완료(이벤트 테스트)")
+
+    # 멤버 메소드: 도서 [대여] 버튼 이벤트
+    def event_book_rent(self):
+        messagebox.showinfo("도서 대여", "도서 대여 완료(이벤트 테스트)")
+
+    # 멤버 메소드: 도서 [반납] 버튼 이벤트
+    def event_book_return(self):
+        messagebox.showinfo("도서 반납", "도서 반납 완료(이벤트 테스트)")
+
 # ======================================================================================================================

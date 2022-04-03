@@ -1,10 +1,13 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 WINDOW_GEOMETRY = '595x400'
 
+SELECT_CANCEL_BTN_WIDTH = 81
+
 SEARCH_ENTRY_WIDTH = 460
-SEARCH_BUTTON_WIDTH = 100
+SEARCH_BTN_WIDTH = 100
 SEARCH_HEIGHT = 24
 
 # =========================================================
@@ -21,17 +24,17 @@ class Window_Search_User():
         self.entry_search_user = Entry(self.window)
         self.entry_search_user.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_search_user = Button(self.window, text="검색")
-        self.btn_search_user.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+        self.btn_search_user = Button(self.window, text="검색", command=self.event_user_search)
+        self.btn_search_user.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
         
         self.label_search_user = Label(self.window, text="회원 검색 결과: 2 개")
         self.label_search_user.place(x=10, y=75)
 
-        self.btn_search_user = Button(self.window, text="선택", width=10)
-        self.btn_search_user.place(x=400, y=360)
+        self.btn_select_user = Button(self.window, text="선택", command=self.event_user_select)
+        self.btn_select_user.place(x=400, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
-        self.btn_search_user = Button(self.window, text="취소", width=10)
-        self.btn_search_user.place(x=500, y=360)
+        self.btn_cancel = Button(self.window, text="취소", command=self.event_cancel)
+        self.btn_cancel.place(x=500, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
         self.load_table()
 
@@ -60,6 +63,19 @@ class Window_Search_User():
         self.scrollbar = Scrollbar(self.user_table, orient=HORIZONTAL)
         self.scrollbar.config()
 
+    # 멤버 메소드: [검색] 버튼 이벤트
+    def event_user_search(self):
+        messagebox.showinfo("회원 검색", "회원 검색(이벤트 테스트)")
+
+    # 멤버 메소드: [선택] 버튼 이벤트
+    def event_user_select(self):
+        messagebox.showinfo("회원 선택", "회원 선택(이벤트 테스트)")
+
+    # 멤버 메소드: [취소] 버튼 이벤트
+    def event_cancel(self):
+        self.window.quit()
+        self.window.destroy()
+
 # =========================================================
 
 
@@ -77,17 +93,17 @@ class Window_Search_Book():
         self.entry_search_book = Entry(self.window)
         self.entry_search_book.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_search_book = Button(self.window, text="검색")
-        self.btn_search_book.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BUTTON_WIDTH, height=SEARCH_HEIGHT)
+        self.btn_search_book = Button(self.window, text="검색", command=self.event_book_search)
+        self.btn_search_book.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
         
         self.label_search_book = Label(self.window, text="도서 검색 결과: 2 개")
         self.label_search_book.place(x=10, y=75)
 
-        self.btn_search_book = Button(self.window, text="선택", width=10)
-        self.btn_search_book.place(x=400, y=360)
+        self.btn_select_book = Button(self.window, text="선택", command=self.event_book_select)
+        self.btn_select_book.place(x=400, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
-        self.btn_search_book = Button(self.window, text="취소", width=10)
-        self.btn_search_book.place(x=500, y=360)
+        self.btn_cancel = Button(self.window, text="취소", command=self.event_cancel)
+        self.btn_cancel.place(x=500, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
         self.load_table()
 
@@ -115,4 +131,18 @@ class Window_Search_Book():
 
         self.scrollbar = Scrollbar(self.book_table, orient=HORIZONTAL)
         self.scrollbar.config()
+
+    # 멤버 메소드: [선택] 버튼 이벤트
+    def event_book_search(self):
+        messagebox.showinfo("도서 검색", "도서 검색(이벤트 테스트)")
+
+    # 멤버 메소드: [선택] 버튼 이벤트
+    def event_book_select(self):
+        messagebox.showinfo("도서 선택", "도서 선택(이벤트 테스트)")
+
+    # 멤버 메소드: [취소] 버튼 이벤트
+    def event_cancel(self):
+        self.window.quit()
+        self.window.destroy()
+
 # =========================================================

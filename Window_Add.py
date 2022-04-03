@@ -26,7 +26,8 @@ class Window_Add_User():
         self.button_cancel.place(x=320,y=180)
         
         self.window.mainloop()
-
+        
+    # 멤버 메소드: [확인] 버튼 이벤트
     def add_user(self):
         messagebox.showinfo("신규 회원 추가", "신규 회원 추가 완료(이벤트 테스트)")
   
@@ -55,6 +56,7 @@ class Window_Add_Book():
         
         self.window.mainloop()
 
+    # 멤버 메소드: [확인] 버튼 이벤트
     def add_book(self):
         messagebox.showinfo("신규 도서 추가", "신규 도서 추가 완료(이벤트 테스트)")
           
