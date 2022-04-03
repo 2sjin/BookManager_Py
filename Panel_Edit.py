@@ -5,6 +5,10 @@ from PIL import Image,ImageTk
 
 ENTRY_WIDTH = 200
 
+IMG_WIDTH = 120
+IMG_HEIGHT = 160
+IMG_FILE_TYPE = ["*.gif", "*.png", "*.jpg", "*.jpeg", "*.bmp"]
+
 # =======================================================================================
 # 클래스: 회원을 추가하거나 수정할 때, 회원 정보 및 이미지를 입력하는 위젯을 모아놓은 패널
 # =======================================================================================
@@ -31,7 +35,7 @@ class Panel_Edit_User():
         self.label_registration.place(x=x,y=y+125)
         
         self.label_image = Label(window)
-        self.label_image.place(x=x-135,y=y-5) 
+        self.label_image.place(x=x-135, y=y-5, width=IMG_WIDTH, height=IMG_HEIGHT) 
 
         self.entry_phone = Entry(window)
         self.entry_phone.place(x=x+60, y=y, width=ENTRY_WIDTH)
@@ -58,11 +62,11 @@ class Panel_Edit_User():
         self.registration_rb2.place(x=x+140,y=y+125)
 
         def open_dialog():
-            filename = askopenfilename(parent=window,filetypes=(("GIF 파일","*.gif"),("모든 파일","*.*")))
+            filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
             photo = Image.open(filename)
-            resize_photo = photo.resize((150, 150))
+            resize_photo = photo.resize((IMG_WIDTH, IMG_HEIGHT))
             photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
-            self.label_image.configure(image=photo_tk,width=120,height=150)
+            self.label_image.configure(image=photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.label_image.image = photo_tk
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)
@@ -100,7 +104,7 @@ class Panel_Edit_Book():
         self.label_book_explain.place(x=x, y=y+150)
 
         self.label_image = Label(window)
-        self.label_image.place(x=x-135,y=y-5) 
+        self.label_image.place(x=x-135,y=y-5, width=IMG_WIDTH, height=IMG_HEIGHT) 
 
         self.entry_isbn = Entry(window)
         self.entry_isbn.place(x=x+60, y=y, width=ENTRY_WIDTH)
@@ -124,11 +128,11 @@ class Panel_Edit_Book():
         self.entry_book_explain.place(x=x+60, y=y+150, width=ENTRY_WIDTH)
 
         def open_dialog():
-            filename = askopenfilename(parent=window,filetypes=(("GIF 파일","*.gif"),("모든 파일","*.*")))
+            filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
             photo = Image.open(filename)
-            resize_photo = photo.resize((150,150))
+            resize_photo = photo.resize((IMG_WIDTH,IMG_HEIGHT))
             photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
-            self.label_image.configure(image=photo_tk,width=120,height=150)
+            self.label_image.configure(image=photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.label_image.image = photo_tk
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)

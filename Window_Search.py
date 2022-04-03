@@ -16,7 +16,7 @@ class Window_Search_User():
     def __init__(self):
         self.window = Tk()
         self.window.title("회원 검색 결과")
-        self.window.geometry('595x400')
+        self.window.geometry(WINDOW_GEOMETRY)
 
         self.entry_search_user = Entry(self.window)
         self.entry_search_user.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
@@ -72,7 +72,7 @@ class Window_Search_Book():
     def __init__(self):
         self.window = Tk()
         self.window.title("도서 검색 결과")
-        self.window.geometry('595x400')
+        self.window.geometry(WINDOW_GEOMETRY)
 
         self.entry_search_book = Entry(self.window)
         self.entry_search_book.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)

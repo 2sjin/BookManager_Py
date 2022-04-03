@@ -12,6 +12,7 @@ SEARCH_HEIGHT = 24
 
 INFO_BUTTON_Y = 280
 LABEL_FOR_TABLE_Y = 340
+RENT_RETURN_BUTTEN_Y = 500
 
 # ======================================================================================================================
 # 클래스: 회원 정보 패널
@@ -99,9 +100,14 @@ class Panel_Show_Book():
         self.btn_save_book = Button(window, text="저장")
         self.btn_save_book.place(x=x+330, y=y+INFO_BUTTON_Y, width=75)
 
+        self.btn_save_book = Button(window, text="대여")
+        self.btn_save_book.place(x=x+240, y=y+RENT_RETURN_BUTTEN_Y, width=75)
+
+        self.btn_save_book = Button(window, text="반납")
+        self.btn_save_book.place(x=x+330, y=y+RENT_RETURN_BUTTEN_Y, width=75)
+
         self.label_for_table = Label(text="대여 정보")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
-
 
     # 멤버 메소드: (이벤트) 도서 검색 결과 윈도우 띄우기
     def load_window_search_book(self):
