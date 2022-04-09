@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 
+from datetime import datetime, timedelta
+
 import pandas as pd
 
 from Window_Add import Window_Add_User
@@ -73,19 +75,30 @@ class Window_Main():
 
     # 멤버 메소드: [대여] 버튼 이벤트
     def event_book_rent(self):
+        # user.csv 불러오기
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
 
+        # rent.csv 불러오기
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"
 
+        # 대여 도서 ISBN, 대여자 전화번호 가져오기
         isbn = self.bookinfo.get_isbn()
         phone = self.userinfo.get_phone()
 
+        # 대여일(오늘 날짜) 가져오기
+        today = datetime.now()
+        today_format = today.strftime("%Y%m%d")
+        
+        # 반납예정일(2주 뒤 날짜) 가져오기
+        due = today + timedelta(weeks=2)
+        due_format = due.strftime("%Y%m%d")
+
         new_rent = { "BOOK_ISBN": isbn,\
                     "USER_PHONE": phone,\
-                    "RENT_DATE": 20221101,\
-                    "RENT_DUE_DATE": 20221115,\
+                    "RENT_DATE": today_format,\
+                    "RENT_DUE_DATE": due_format,\
                     "RENT_RETURN_DATE": -1 }
         df_rent = df_rent.append(new_rent, ignore_index=True)
 
@@ -98,9 +111,11 @@ class Window_Main():
 
     # 멤버 메소드: [반납] 버튼 이벤트
     def event_book_return(self):
+        # user.csv 불러오기
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
 
+        # rent.csv 불러오기
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"
 
@@ -108,7 +123,11 @@ class Window_Main():
         seq = max(df_rent[df_rent["BOOK_ISBN"] == isbn].index)
         rent_phone = df_rent["USER_PHONE"].loc[seq]
 
-        df_rent["RENT_RETURN_DATE"].loc[seq] = 20221111
+        # 반납일(오늘 날짜) 가져오기
+        today = datetime.now()
+        today_format = today.strftime("%Y%m%d")
+
+        df_rent["RENT_RETURN_DATE"].loc[seq] = today_format
         df_user["USER_RENT_CNT"].loc[rent_phone] -= 1
 
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
