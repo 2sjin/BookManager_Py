@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+import pandas as pd
+
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
 from Window_Search import Window_Search_User
@@ -15,7 +17,6 @@ BTN_WIDTH = 75
 
 INFO_BTN_Y = 280
 LABEL_FOR_TABLE_Y = 340
-RENT_RETURN_BTN_Y = 500
 
 # ======================================================================================================================
 # 클래스: 회원 정보 패널
@@ -77,6 +78,11 @@ class Panel_Show_User():
 
         sample_value = ("9788970504773", "파이썬과 데이터 과학", "천인국, 박동규, 강영민")
         self.book_table.insert("", "end", text="", value=sample_value, iid=sample_value[0])
+
+    # 멤버 메소드: 전화번호 리턴
+    def get_phone(self):
+        return self.user_editor.get_phone()
+
 # ======================================================================================================================
 
 
@@ -110,12 +116,6 @@ class Panel_Show_Book():
 
         self.btn_save_book = Button(window, text="저장", command=self.event_book_save)
         self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
-
-        self.btn_save_book = Button(window, text="대여", command=self.event_book_rent)
-        self.btn_save_book.place(x=x+240, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
-
-        self.btn_save_book = Button(window, text="반납", command=self.event_book_return)
-        self.btn_save_book.place(x=x+330, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여 정보")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
@@ -153,13 +153,9 @@ class Panel_Show_Book():
     # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
     def event_book_save(self):
         messagebox.showinfo("도서 정보 수정", "도서 정보 수정 완료(이벤트 테스트)")
-
-    # 멤버 메소드: 도서 [대여] 버튼 이벤트
-    def event_book_rent(self):
-        messagebox.showinfo("도서 대여", "도서 대여 완료(이벤트 테스트)")
-
-    # 멤버 메소드: 도서 [반납] 버튼 이벤트
-    def event_book_return(self):
-        messagebox.showinfo("도서 반납", "도서 반납 완료(이벤트 테스트)")
+   
+    # 멤버 메소드: ISBN 리턴
+    def get_isbn(self):
+        return self.book_editor.get_isbn()
 
 # ======================================================================================================================
