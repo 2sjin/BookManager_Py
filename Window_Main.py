@@ -134,10 +134,15 @@ class Window_Main():
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
         df_rent.to_csv(DIR_CSV_RENT, index=True, encoding='CP949')
 
+        # 테이블 새로고침
+        self.userinfo.update_table()
+        self.bookinfo.update_table()
+
         msg = "도서 대여 완료\n"
         msg += f"- {book_title}({book_isbn})\n"
         msg += f"- 대여자: {user_name}({user_phone})"
         messagebox.showinfo("도서 대여", msg)
+
         return 0
 
 
@@ -169,8 +174,14 @@ class Window_Main():
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
         df_rent.to_csv(DIR_CSV_RENT, index=True, encoding='CP949')
 
+        # 테이블 새로고침
+        self.userinfo.update_table()
+        self.bookinfo.update_table()
+
         msg = "도서 반납 완료\n"
         msg += f"- {book_title}({book_isbn})\n"
         messagebox.showinfo("도서 반납", msg)
+
+        return 0
 
 # ===========================================================================================
