@@ -24,6 +24,7 @@ class Window_Add_User():
             self.window.quit()
             self.window.destroy()
         self.user_editor = Panel_Edit_User(self.window, x=140, y=10)   # 회원 Edit 패널을 윈도우에 포함시킴
+        self.user_editor.forget_regis()
         self.button_check = Button(self.window,text="확인",width=7, command=self.add_user)  # [확인] 버튼 이벤트 추가
         self.button_check.place(x=240,y=180)
         self.button_cancel = Button(self.window,text="취소",width=7)
@@ -41,12 +42,8 @@ class Window_Add_User():
         user_birthday = self.user_editor.get_birthday()
         user_gender = self.user_editor.get_gender()
         user_email = self.user_editor.get_email()
-        print(user_birthday)
-        print(user_gender)
         new_user = pd.DataFrame.from_dict([{ "USER_PHONE": user_phone, "USER_NAME": user_name,"USER_BIRTH": user_birthday,
         "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": "1", "USER_REG": True,"USER_RENT_CNT": 0 }])
-        print(df_user)
-        print(new_user)
         df_user = pd.concat([df_user,new_user])
         df_user = df_user.set_index(df_user['USER_PHONE'])
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')

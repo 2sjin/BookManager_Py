@@ -87,6 +87,9 @@ class Panel_Edit_User():
         return self.entry_email.get()
     def get_gender(self):
         return self.RadioButton_gender.get()
+    def forget_regis(self):
+        self.registration_rb1.pack_forget()
+        self.registration_rb2.pack_forget()
 
 
 # =======================================================================================
