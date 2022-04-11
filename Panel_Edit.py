@@ -49,9 +49,11 @@ class Panel_Edit_User():
         self.entry_email = Entry(window)
         self.entry_email.place(x=x+60,y=y+100, width=ENTRY_WIDTH)
 
-        self.RadioButton_gender = IntVar()
-        self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender,value=1)
-        self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender,value=2)
+        self.RadioButton_gender = StringVar()
+        self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender)
+        self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender)
+        self.gender_rb1.config(value="남")
+        self.gender_rb2.config(value="여")
         self.gender_rb1.place(x=x+60,y=y+75)
         self.gender_rb2.place(x=x+140,y=y+75)
 
@@ -75,6 +77,17 @@ class Panel_Edit_User():
     # 멤버 메소드: 전화번호 리턴
     def get_phone(self):
         return self.entry_phone.get()
+    def get_name(self):
+        return self.entry_name.get()
+    def get_birthday(self):
+        number = self.entry_birthday.get()
+        number = number.replace("-","")
+        return number
+    def get_email(self):
+        return self.entry_email.get()
+    def get_gender(self):
+        return self.RadioButton_gender.get()
+
 
 # =======================================================================================
 
