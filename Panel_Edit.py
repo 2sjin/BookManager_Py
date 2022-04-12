@@ -137,4 +137,5 @@ class Panel_Edit_Book():
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)
         self.Button_image.place(x=x-130,y=y+160)
+        
 # =======================================================================================
