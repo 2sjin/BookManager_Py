@@ -70,10 +70,21 @@ class Window_Search_User():
 
     # 멤버 메소드: [검색] 버튼 이벤트
     def event_user_search(self):
+        # 테이블 초기화
+        for item in self.user_table.get_children():
+            self.user_table.delete(item)
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         index_key = self.entry_search_user.get()
         condition = df_user[df_user["USER_NAME"].str.contains(index_key)]
+        for user_phone in condition["USER_PHONE"]:
+            user_name = condition["USER_NAME"].loc[user_phone]
+            user_birthday = condition["USER_BIRTH"].loc[user_phone]
+            user_sex = condition["USER_SEX"].loc[user_phone]
+            user_email = condition["USER_MAIL"].loc[user_phone]
+            user_reg = condition["USER_REG"].loc[user_phone]
+            user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
+            self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
