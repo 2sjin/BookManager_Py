@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import pandas as pd
 
 WINDOW_GEOMETRY = '595x400'
 
@@ -9,6 +10,10 @@ SELECT_CANCEL_BTN_WIDTH = 81
 SEARCH_ENTRY_WIDTH = 460
 SEARCH_BTN_WIDTH = 100
 SEARCH_HEIGHT = 24
+
+DIR_CSV_USER = "csv/user.csv"
+DIR_CSV_BOOK = "csv/book.csv"
+DIR_CSV_RENT = "csv/rent.csv"
 
 # =========================================================
 # 클래스: 회원 검색 결과 윈도우
@@ -65,7 +70,10 @@ class Window_Search_User():
 
     # 멤버 메소드: [검색] 버튼 이벤트
     def event_user_search(self):
-        messagebox.showinfo("회원 검색", "회원 검색(이벤트 테스트)")
+        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        index_key = self.entry_search_user.get()
+        condition = df_user[df_user["USER_NAME"].str.contains(index_key)]
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):

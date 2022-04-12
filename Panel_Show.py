@@ -78,7 +78,19 @@ class Panel_Show_User():
 
     # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
     def event_user_save(self):
-        messagebox.showinfo("회원 정보 수정", "회원 정보 저장 완료(이벤트 테스트)")
+        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+
+        phone = self.user_editor.get_phone()
+
+        df_user["USER_PHONE"].loc[phone] = self.user_editor.get_phone()
+        df_user["USER_NAME"].loc[phone] = self.user_editor.get_name()
+        df_user["USER_BIRTH"].loc[phone] = self.user_editor.get_birthday()
+        df_user["USER_SEX"].loc[phone] = "남"
+        df_user["USER_MAIL"].loc[phone] = self.user_editor.get_email()
+        df_user["USER_IMAGE"].loc[phone] = "MyProfile2.png"
+
+        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
