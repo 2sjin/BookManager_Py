@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+import pandas as pd
+
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
 from Window_Search import Window_Search_User
@@ -15,7 +17,25 @@ BTN_WIDTH = 75
 
 INFO_BTN_Y = 280
 LABEL_FOR_TABLE_Y = 340
-RENT_RETURN_BTN_Y = 500
+
+DIR_CSV_USER = "csv/user.csv"
+DIR_CSV_BOOK = "csv/book.csv"
+DIR_CSV_RENT = "csv/rent.csv"
+
+# 전역 함수: 데이터프레임 불러오기
+def load_dataframes():
+    # csv 파일에서 데이터프레임 불러오기
+    df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+    df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+    df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
+
+    # 데이터프레임 인덱스 설정
+    df_user = df_user.set_index(df_user['USER_PHONE'])  # 전화번호를 인덱스로 설정
+    df_book = df_book.set_index(df_book['BOOK_ISBN'])   # ISBN을 인덱스로 설정
+    df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
+
+    return df_user, df_book, df_rent
+
 
 # ======================================================================================================================
 # 클래스: 회원 정보 패널
@@ -58,7 +78,19 @@ class Panel_Show_User():
 
     # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
     def event_user_save(self):
-        messagebox.showinfo("회원 정보 수정", "회원 정보 저장 완료(이벤트 테스트)")
+        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+
+        phone = self.user_editor.get_phone()
+
+        df_user["USER_PHONE"].loc[phone] = self.user_editor.get_phone()
+        df_user["USER_NAME"].loc[phone] = self.user_editor.get_name()
+        df_user["USER_BIRTH"].loc[phone] = self.user_editor.get_birthday()
+        df_user["USER_SEX"].loc[phone] = "남"
+        df_user["USER_MAIL"].loc[phone] = self.user_editor.get_email()
+        df_user["USER_IMAGE"].loc[phone] = "MyProfile2.png"
+
+        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
@@ -73,10 +105,43 @@ class Panel_Show_User():
             self.book_table.column(column_tuple[i], width=width_tuple[i], anchor="center")
             self.book_table.heading(column_tuple[i], text=column_tuple[i], anchor="center")
 
-        self.book_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
+        # 열 인덱스를 표시하지 않음
+        self.book_table["show"] = "headings"
 
-        sample_value = ("9788970504773", "파이썬과 데이터 과학", "천인국, 박동규, 강영민")
-        self.book_table.insert("", "end", text="", value=sample_value, iid=sample_value[0])
+        # 테이블 갱신
+        self.update_table()
+
+    # 멤버 메소드: '대여 정보' 테이블 갱신
+    def update_table(self):
+        # 테이블 초기화
+        for item in self.book_table.get_children():
+            self.book_table.delete(item)
+
+        # 데이터프레임 불러오기
+        __dummy__, df_book, df_rent = load_dataframes()
+
+        # 선택한 회원의 전화번호 가져오기
+        try:
+            user_phone = self.get_phone()
+        except ValueError:
+            return 0
+
+        # 선택한 회원에 대한 대여 이력 필터링
+        condition1 = df_rent["USER_PHONE"] == user_phone
+        condition2 = df_rent["RENT_RETURN_DATE"] == -1
+        df_temp = df_rent[condition1 & condition2] 
+
+        # 테이블에 레코드 추가
+        for book_isbn in df_temp["BOOK_ISBN"]:
+            book_title = df_book["BOOK_TITLE"].loc[book_isbn]
+            book_author = df_book["BOOK_AUTHOR"].loc[book_isbn]
+            add_value = (book_isbn, book_title, book_author)
+            self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+
+    # 멤버 메소드: 전화번호 리턴
+    def get_phone(self):
+        return self.user_editor.get_phone()
+
 # ======================================================================================================================
 
 
@@ -111,16 +176,10 @@ class Panel_Show_Book():
         self.btn_save_book = Button(window, text="저장", command=self.event_book_save)
         self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="대여", command=self.event_book_rent)
-        self.btn_save_book.place(x=x+240, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
-
-        self.btn_save_book = Button(window, text="반납", command=self.event_book_return)
-        self.btn_save_book.place(x=x+330, y=y+RENT_RETURN_BTN_Y, width=BTN_WIDTH)
-
         self.label_for_table = Label(text="대여 정보")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
 
-    # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
+    # 멤버 메소드: '대여 정보' 테이블 불러오기
     def load_table(self, window, x, y):
         column_tuple = ("전화번호", "이름", "대여일", "반납예정일")
         width_tuple = (120, 85, 100, 100)
@@ -133,10 +192,40 @@ class Panel_Show_Book():
             self.book_table.column(column_tuple[i], width=width_tuple[i], anchor="center")
             self.book_table.heading(column_tuple[i], text=column_tuple[i], anchor="center")
 
-        self.book_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
+        # 열 인덱스를 표시하지 않음
+        self.book_table["show"] = "headings"
 
-        sample_value = ("01012345678", "홍길동", "2022-04-01", "2022-04-15")
-        self.book_table.insert("", "end", text="", value=sample_value, iid=sample_value[0])
+        # 테이블 갱신
+        self.update_table()
+
+
+    # 멤버 메소드: '대여 정보' 테이블 갱신
+    def update_table(self):
+        # 테이블 초기화
+        for item in self.book_table.get_children():
+            self.book_table.delete(item)
+
+        # 데이터프레임 불러오기
+        df_user, __dummy__, df_rent = load_dataframes()
+
+        # 선택한 도서의 ISBN 가져오기
+        try:
+            book_isbn = self.get_isbn()
+        except ValueError:
+            return 0
+
+        # 선택한 도서의 최근 대여 이력 가져오기
+        rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
+        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        user_name = df_user["USER_NAME"].loc[user_phone]
+        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+
+        # 대여 중인 도서이면 테이블에 레코드 추가
+        if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
+            add_value = (user_phone, user_name, rent_date, rent_due_date)
+            self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
@@ -153,13 +242,9 @@ class Panel_Show_Book():
     # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
     def event_book_save(self):
         messagebox.showinfo("도서 정보 수정", "도서 정보 수정 완료(이벤트 테스트)")
-
-    # 멤버 메소드: 도서 [대여] 버튼 이벤트
-    def event_book_rent(self):
-        messagebox.showinfo("도서 대여", "도서 대여 완료(이벤트 테스트)")
-
-    # 멤버 메소드: 도서 [반납] 버튼 이벤트
-    def event_book_return(self):
-        messagebox.showinfo("도서 반납", "도서 반납 완료(이벤트 테스트)")
+   
+    # 멤버 메소드: ISBN 리턴
+    def get_isbn(self):
+        return self.book_editor.get_isbn()
 
 # ======================================================================================================================
