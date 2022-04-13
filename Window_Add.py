@@ -5,7 +5,7 @@ import pandas as pd
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
 
-DIR_CSV_USER = "csv/USER.csv"
+DIR_CSV_USER = "csv/user.csv"
 DIR_CSV_BOOK = "csv/book.csv"
 DIR_CSV_RENT = "csv/rent.csv"
 
@@ -74,6 +74,18 @@ class Window_Add_Book():
 
     # 멤버 메소드: [확인] 버튼 이벤트
     def add_book(self):
-        messagebox.showinfo("신규 도서 추가", "신규 도서 추가 완료(이벤트 테스트)")
-          
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+        df_book = df_book.set_index(df_book['BOOK_ISBN'])
+        book_isbn = self.book_editor.get_isbn()
+        book_title = self.book_editor.get_title()
+        book_author = self.book_editor.get_author()
+        book_publisher = self.book_editor.get_publisher()
+        book_price = self.book_editor.get_price()
+        book_link = self.book_editor.get_link()
+        book_explain = self.book_editor.get_book_explain()
+        new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
+        "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": "1", "BOOK_LINK": book_link }])
+        df_book = pd.concat([df_book,new_book])
+        df_book = df_book.set_index(df_book['BOOK_ISBN'])
+        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 # ========================================================================================================
