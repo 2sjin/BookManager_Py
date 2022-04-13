@@ -50,10 +50,8 @@ class Panel_Edit_User():
         self.entry_email.place(x=x+60,y=y+100, width=ENTRY_WIDTH)
 
         self.RadioButton_gender = StringVar()
-        self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender)
-        self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender)
-        self.gender_rb1.config(value="남")
-        self.gender_rb2.config(value="여")
+        self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender,value="남")
+        self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender,value="여")
         self.gender_rb1.place(x=x+60,y=y+75)
         self.gender_rb2.place(x=x+140,y=y+75)
 
@@ -86,7 +84,8 @@ class Panel_Edit_User():
     def get_email(self):
         return self.entry_email.get()
     def get_gender(self):
-        return self.RadioButton_gender.get()
+        gender_text = self.RadioButton_gender.get()
+        return gender_text
     def forget_regis(self):
         self.registration_rb1.pack_forget()
         self.registration_rb2.pack_forget()

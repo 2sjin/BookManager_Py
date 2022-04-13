@@ -46,7 +46,13 @@ class Window_Add_User():
         "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": "1", "USER_REG": True,"USER_RENT_CNT": 0 }])
         df_user = pd.concat([df_user,new_user])
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+        print(self.user_editor.get_gender())
+        
+        str = messagebox.askquestion("USER_ADD", user_name+"("+user_phone+")추가 하시겠습니까?")
+        if str == "yes":
+            self.window.quit()
+            self.window.destroy()
+        #    df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 # ========================================================================================================
 
 

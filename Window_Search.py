@@ -59,12 +59,6 @@ class Window_Search_User():
             self.user_table.heading(column_tuple[i], text=column_tuple[i], anchor="center")
 
         self.user_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
-
-        sample_value_1 = ("01025773617", "이승진", "1997-06-18", "남", "options3224@naver.com", True)
-        sample_value_2 = ("01012345678", "홍길동", "1950-01-01", "남", "hgd@naver.com", True)
-        self.user_table.insert("", "end", text="", value=sample_value_1, iid=sample_value_1[0])
-        self.user_table.insert("", "end", text="", value=sample_value_2, iid=sample_value_2[0])
-
         self.scrollbar = Scrollbar(self.user_table, orient=HORIZONTAL)
         self.scrollbar.config()
 
