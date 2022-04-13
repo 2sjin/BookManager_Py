@@ -52,7 +52,7 @@ class Window_Add_User():
         if str == "yes":
             self.window.quit()
             self.window.destroy()
-        #    df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+            df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 # ========================================================================================================
 
 

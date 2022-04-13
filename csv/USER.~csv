@@ -1,5 +1,5 @@
 USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
-010-1234-5678,심다운,20070310,남,down@gmail.com,,True,2
+010-1234-5678,심다운,20070310,남,down@gmail.com,,True,1
 010-1111-2222,신한길,19920530,남,1way@gmail.com,,True,0
 010-3333-4444,배힘찬,20070228,남,powerful@gmail.com,,True,0
 010-5555-6666,장하늘,19971110,여,longsky@gmail.com,,True,0
@@ -9,3 +9,6 @@ USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT
 010-1122-3344,손은별,19930606,여,silverstar@gmail.com,,True,0
 010-5566-7788,장기쁨,19901019,여,happy@gmail.com,,True,0
 010-8765-4321,고으뜸,20081129,남,gobest@gmail.com,,True,0
+010-7923-1077,조준호,19980512,남,hiwhwnsgh455@naver.com,1.0,True,0
+010-5443-4863,조준호,19980512,남,abc123@naver.com,1.0,True,0
+010-2222-2222,콩순 이,19920202,,22222222@deu.ac.kr,1.0,True,0
