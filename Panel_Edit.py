@@ -159,4 +159,20 @@ class Panel_Edit_Book():
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)
         self.Button_image.place(x=x-130,y=y+160)
 
+    # 멤버 메소드: ISBN 리턴
+    def get_isbn(self):
+        return self.entry_isbn.get()
+    def get_title(self):
+        return self.entry_title.get()
+    def get_author(self):
+        return self.entry_author.get()
+    def get_publisher(self):
+        return self.entry_publisher.get()
+    def get_price(self):
+        return self.entry_price.get()
+    def get_link(self):
+        return self.entry_link.get()
+    def get_book_explain(self):
+        return self.entry_book_explain.get()
+
 # =======================================================================================
