@@ -54,7 +54,6 @@ class Panel_Edit_User():
         self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender,value="여")
         self.gender_rb1.place(x=x+60,y=y+75)
         self.gender_rb2.place(x=x+140,y=y+75)
-
         self.RadioButton_registration = IntVar(window)
         self.registration_rb1= Radiobutton(window, text="등록",variable=self.RadioButton_registration,value=1)
         self.registration_rb2= Radiobutton(window, text="탈퇴(정보 유지)",variable=self.RadioButton_registration,value=2)

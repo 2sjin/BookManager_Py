@@ -71,7 +71,35 @@ class Panel_Show_User():
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_user_search(self):
         self.Search = Window_Search_User()
-        self.user_editor.entry_name.config(textvariable="조준호")
+        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        phone = self.Search.getTable[0]
+        # 행 찾기
+        select_user = df_user.loc[df_user['USER_PHONE']==phone]
+        # entry 내용 삭제
+        self.user_editor.entry_name.delete("0","end")
+        self.user_editor.entry_phone.delete("0","end")
+        self.user_editor.entry_birthday.delete("0","end")
+        self.user_editor.entry_email.delete("0","end")
+        # 찾은 행 값 삽입하기
+        self.user_editor.entry_phone.insert(0,phone)
+        self.user_editor.entry_name.insert(0,select_user["USER_NAME"].loc[phone])
+        birthday = str(select_user["USER_BIRTH"].loc[phone])
+        birthday = birthday[:4]+"-"+birthday[4:6]+"-"+birthday[6:]
+        self.user_editor.entry_birthday.insert(0,birthday)
+        gender = select_user["USER_SEX"].loc[phone]
+        if gender=="남":
+            self.user_editor.gender_rb1.select()
+        else:
+            self.user_editor.gender_rb2.select()
+        self.user_editor.entry_email.insert(0,select_user["USER_MAIL"].loc[phone])
+        REG = select_user["USER_REG"].loc[phone]
+        if REG:
+            self.user_editor.registration_rb1.select()
+        else:
+            self.user_editor.registration_rb2.select()
+        
+        
         
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트

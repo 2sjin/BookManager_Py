@@ -44,8 +44,7 @@ class Window_Search_User():
         self.load_table()
         def clicked_table(event):
             select_Table = self.user_table.focus()
-            getTable = self.user_table.item(select_Table).get('values')
-            print(getTable)
+            self.getTable = self.user_table.item(select_Table).get('values')
         self.user_table.bind('<ButtonRelease-1>',clicked_table)
         self.window.mainloop()
 
@@ -86,7 +85,9 @@ class Window_Search_User():
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
-        messagebox.showinfo("회원 선택", "회원 선택(이벤트 테스트)")
+        messagebox.showinfo("회원 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+        self.window.quit()
+        self.window.destroy()
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
