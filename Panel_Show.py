@@ -70,10 +70,14 @@ class Panel_Show_User():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_user_search(self):
-        Window_Search_User()
+        self.Search = Window_Search_User()
+        self.user_editor.entry_name.config(textvariable="조준호")
+        
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
     def event_user_refresh(self):
+        self.Search = self.Search.get_self_return()
+        print(self.Search)
         messagebox.showinfo("원래대로", "회원 정보 원래대로(이벤트 테스트)")
 
     # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트

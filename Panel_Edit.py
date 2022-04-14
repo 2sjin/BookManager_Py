@@ -49,17 +49,18 @@ class Panel_Edit_User():
         self.entry_email = Entry(window)
         self.entry_email.place(x=x+60,y=y+100, width=ENTRY_WIDTH)
 
-        self.RadioButton_gender = StringVar()
+        self.RadioButton_gender = StringVar(window)
         self.gender_rb1 = Radiobutton(window, text="남",variable=self.RadioButton_gender,value="남")
         self.gender_rb2 = Radiobutton(window, text="여",variable=self.RadioButton_gender,value="여")
         self.gender_rb1.place(x=x+60,y=y+75)
         self.gender_rb2.place(x=x+140,y=y+75)
 
-        self.RadioButton_registration = IntVar()
+        self.RadioButton_registration = IntVar(window)
         self.registration_rb1= Radiobutton(window, text="등록",variable=self.RadioButton_registration,value=1)
         self.registration_rb2= Radiobutton(window, text="탈퇴(정보 유지)",variable=self.RadioButton_registration,value=2)
         self.registration_rb1.place(x=x+60,y=y+125)
         self.registration_rb2.place(x=x+140,y=y+125)
+        
 
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
@@ -87,8 +88,11 @@ class Panel_Edit_User():
         gender_text = self.RadioButton_gender.get()
         return gender_text
     def forget_regis(self):
-        self.registration_rb1.pack_forget()
-        self.registration_rb2.pack_forget()
+        self.label_registration.place_forget()
+        self.registration_rb1.place_forget()
+        self.registration_rb2.place_forget()
+    def self_return(self):
+        return self
 
 
 # =======================================================================================
