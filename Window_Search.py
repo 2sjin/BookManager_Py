@@ -40,9 +40,7 @@ class Window_Search_User():
 
         self.btn_cancel = Button(self.window, text="취소", command=self.event_cancel)
         self.btn_cancel.place(x=500, y=360, width=SELECT_CANCEL_BTN_WIDTH)
-
         self.load_table()
-
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -61,6 +59,11 @@ class Window_Search_User():
         self.user_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
         self.scrollbar = Scrollbar(self.user_table, orient=HORIZONTAL)
         self.scrollbar.config()
+        def click_item(event):
+            selectedItem = self.user_table.focus()
+            self.getValue = self.user_table.item(selectedItem).get('values')
+            
+        self.user_table.bind('<ButtonRelease-1>',click_item)
 
     # 멤버 메소드: [검색] 버튼 이벤트
     def event_user_search(self):
@@ -79,16 +82,21 @@ class Window_Search_User():
             user_reg = condition["USER_REG"].loc[user_phone]
             user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
             self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
+        
+        
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
         messagebox.showinfo("회원 선택", "회원 선택(이벤트 테스트)")
+        return self.getValue
+    
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
         self.window.quit()
         self.window.destroy()
-
+    def get_self_return(self):
+        return self
 # =========================================================
 
 
