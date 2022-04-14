@@ -42,7 +42,11 @@ class Window_Search_User():
         self.btn_cancel.place(x=500, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
         self.load_table()
-
+        def clicked_table(event):
+            select_Table = self.user_table.focus()
+            getTable = self.user_table.item(select_Table).get('values')
+            print(getTable)
+        self.user_table.bind('<ButtonRelease-1>',clicked_table)
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -88,6 +92,7 @@ class Window_Search_User():
     def event_cancel(self):
         self.window.quit()
         self.window.destroy()
+    
 
 # =========================================================
 
