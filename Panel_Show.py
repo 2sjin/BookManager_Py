@@ -93,6 +93,7 @@ class Panel_Show_User():
         df_user["USER_SEX"].loc[phone] = "남"
         df_user["USER_MAIL"].loc[phone] = self.user_editor.get_email()
         df_user["USER_IMAGE"].loc[phone] = "MyProfile2.png"
+
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
