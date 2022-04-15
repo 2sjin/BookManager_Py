@@ -70,6 +70,7 @@ class Panel_Edit_User():
             self.label_image.image = photo_tk
             
             
+            
 
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)

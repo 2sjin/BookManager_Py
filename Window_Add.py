@@ -4,6 +4,8 @@ from urllib.parse import uses_fragment
 import pandas as pd
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
+from PIL import Image
+from PIL import Image,ImageTk
 
 DIR_CSV_USER = "csv/user.csv"
 DIR_CSV_BOOK = "csv/book.csv"
@@ -42,15 +44,22 @@ class Window_Add_User():
         user_birthday = self.user_editor.get_birthday()
         user_gender = self.user_editor.get_gender()
         user_email = self.user_editor.get_email()
+        address = "sample_image/"+user_phone+".gif"
         new_user = pd.DataFrame.from_dict([{ "USER_PHONE": user_phone, "USER_NAME": user_name,"USER_BIRTH": user_birthday,
-        "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": "1", "USER_REG": True,"USER_RENT_CNT": 0 }])
+        "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": address, "USER_REG": True,"USER_RENT_CNT": 0 }])
         df_user = pd.concat([df_user,new_user])
         df_user = df_user.set_index(df_user['USER_PHONE'])
         str = messagebox.askquestion("USER_ADD", user_name+"("+user_phone+")추가 하시겠습니까?")
         if str == "yes":
+            try:
+                self.user_editor.photo.save(address,"gif")
+            except:
+                image = Image.open("sample_image/Default_Image.gif")
+                image.save(address,"gif")
+            df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
             self.window.quit()
             self.window.destroy()
-            df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+            
 # ========================================================================================================
 
 
