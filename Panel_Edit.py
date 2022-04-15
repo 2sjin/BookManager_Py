@@ -63,11 +63,14 @@ class Panel_Edit_User():
 
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
-            photo = Image.open(filename)
-            resize_photo = photo.resize((IMG_WIDTH, IMG_HEIGHT))
+            self.photo = Image.open(filename)
+            resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
             photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
             self.label_image.configure(image=photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.label_image.image = photo_tk
+            
+            
+
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)
         self.Button_image.place(x=x-130,y=y+160)
