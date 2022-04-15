@@ -47,8 +47,12 @@ class Window_Add_User():
         address = "sample_image/"+user_phone+".gif"
         new_user = pd.DataFrame.from_dict([{ "USER_PHONE": user_phone, "USER_NAME": user_name,"USER_BIRTH": user_birthday,
         "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": address, "USER_REG": True,"USER_RENT_CNT": 0 }])
+        
         df_user = pd.concat([df_user,new_user])
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        if user_phone in list(df_user["USER_PHONE"]):
+                messagebox.showinfo("전화번호 중복", "전화번호"+user_phone+"가 중복되었습니다.")
+                return 0
         str = messagebox.askquestion("USER_ADD", user_name+"("+user_phone+")추가 하시겠습니까?")
         if str == "yes":
             try:
