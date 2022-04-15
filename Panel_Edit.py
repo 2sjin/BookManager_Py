@@ -93,6 +93,8 @@ class Panel_Edit_User():
         self.registration_rb2.place_forget()
     def self_return(self):
         return self
+    def get_birthday2(self):
+        return self.entry_birthday.get()
 
 
 # =======================================================================================

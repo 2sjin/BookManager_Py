@@ -50,9 +50,18 @@ class Window_Add_User():
         
         df_user = pd.concat([df_user,new_user])
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        if len(self.user_editor.get_phone()) < 13 and self.user_editor.get_phone().count("-") < 2:
+            messagebox.showinfo("전화번호 형식 오류", "□□□-□□□□-□□□□ 형식을 지켜주세요!!")
+            return 0
         if user_phone in list(df_user["USER_PHONE"]):
-                messagebox.showinfo("전화번호 중복", "전화번호"+user_phone+"가 중복되었습니다.")
-                return 0
+            messagebox.showinfo("전화번호 중복", "전화번호"+user_phone+"가 중복되었습니다.")
+            return 0
+        if self.user_editor.get_name() =="":
+            messagebox.showinfo("이름 빈공간 발생", "이름을 적어주세요!!")
+            return 0
+        if len(self.user_editor.get_birthday2()) < 10 and self.user_editor.get_birthday2().count("-") < 2:
+            messagebox.showinfo("생일 형식 오류", "□□□□-□□-□□ 형식을 지켜주세요!!")
+            return 0
         str = messagebox.askquestion("USER_ADD", user_name+"("+user_phone+")추가 하시겠습니까?")
         if str == "yes":
             try:
