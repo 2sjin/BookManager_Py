@@ -183,7 +183,11 @@ class Panel_Show_User():
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         address = "sample_image/"+self.phone+".gif"
-        self.user_editor.photo.save(address,"gif")
+        try:
+            self.user_editor.photo.save(address,"gif")
+        except:
+            pass
+        
         df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
