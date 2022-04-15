@@ -197,12 +197,28 @@ class Panel_Show_User():
         if len(self.user_editor.get_birthday2()) < 10 and self.user_editor.get_birthday2().count("-") < 2:
             messagebox.showinfo("생일 형식 오류", "□□□□-□□-□□ 형식을 지켜주세요!!")
             return 0
+
+        df_user["USER_IMAGE"].loc[self.phone] = address
+        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+
+        # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [원래대로] 버튼을 눌렀을 때 수정한 정보 반영)
+        user_phone = df_user["USER_PHONE"].tolist()
+        self.phone = df_user["USER_PHONE"].loc[self.phone]
+        self.name = df_user["USER_NAME"].loc[self.phone]
+        self.birthday = df_user["USER_BIRTH"].loc[self.phone]
+        self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
+        self.gender = df_user["USER_SEX"].loc[self.phone]
+        self.mail = df_user["USER_MAIL"].loc[self.phone]
+        address = "sample_image/"+self.phone+".gif"
+        user_phone.remove(self.phone)
+
+        # 이미지 파일 저장("전화번호.gif")
         try:
             self.user_editor.photo.save(address,"gif")
         except:
             pass
-        df_user["USER_IMAGE"].loc[self.phone] = address
-        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+
+        messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
