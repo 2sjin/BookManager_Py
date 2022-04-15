@@ -125,40 +125,6 @@ class Panel_Show_User():
         messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
 
 
-    # 멤버 메소드: 도서 반납 시 회원 정보 패널에 대여자(반납자)의 정보 출력
-    def event_show_return_user(self, return_user_phone):
-        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
-        df_user = df_user.set_index(df_user['USER_PHONE'])
-        self.phone = return_user_phone
-        # 행 찾기
-        select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
-        # entry 내용 삭제
-        self.user_editor.entry_name.delete("0","end")
-        self.user_editor.entry_phone.delete("0","end")
-        self.user_editor.entry_birthday.delete("0","end")
-        self.user_editor.entry_email.delete("0","end")
-        # 찾은 행 값 삽입하기
-        self.user_editor.entry_phone.insert(0,self.phone)
-        self.name = select_user["USER_NAME"].loc[self.phone]
-        self.user_editor.entry_name.insert(0,self.name)
-        self.birthday = str(select_user["USER_BIRTH"].loc[self.phone])
-        self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
-        self.user_editor.entry_birthday.insert(0,self.birthday)
-        self.gender = select_user["USER_SEX"].loc[self.phone]
-        if self.gender=="남":
-            self.user_editor.gender_rb1.select()
-        else:
-            self.user_editor.gender_rb2.select()
-        self.email = select_user["USER_MAIL"].loc[self.phone]
-        self.user_editor.entry_email.insert(0,self.email)
-        self.REG = select_user["USER_REG"].loc[self.phone]
-        if self.REG:
-            self.user_editor.registration_rb1.select()
-        else:
-            self.user_editor.registration_rb2.select()
-        self.update_table()     # 대여 중인 도서 목록 새로고침
-
-
     # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
     def event_user_save(self):
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')

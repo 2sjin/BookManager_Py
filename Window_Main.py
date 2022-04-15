@@ -203,9 +203,6 @@ class Window_Main():
         self.userinfo.update_table()
         self.bookinfo.update_table()
 
-        # 회원 정보 패널에 대여자(반납자) 정보 출력
-        self.userinfo.event_show_return_user(rent_phone)
-        
         msg = "도서 반납 완료\n"
         msg += f"- {book_title}({book_isbn})\n"
         messagebox.showinfo("도서 반납", msg)
