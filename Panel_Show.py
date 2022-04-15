@@ -177,17 +177,21 @@ class Panel_Show_User():
     def event_user_save(self):
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        user_phone = df_user["USER_PHONE"].tolist()
         df_user["USER_PHONE"].loc[self.phone] = self.user_editor.get_phone()
         df_user["USER_NAME"].loc[self.phone] = self.user_editor.get_name()
         df_user["USER_BIRTH"].loc[self.phone] = self.user_editor.get_birthday()
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         address = "sample_image/"+self.phone+".gif"
+        user_phone.remove(self.phone)
+        if self.user_editor.get_phone() in user_phone:
+                messagebox.showinfo("전화번호 중복", "전화번호"+self.user_editor.get_phone()+"가 중복되었습니다.")
+                return 0
         try:
             self.user_editor.photo.save(address,"gif")
         except:
             pass
-        
         df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
