@@ -1,5 +1,5 @@
 USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
-010-1234-5678,심다운,20070310,여,down@gmail.com,,True,1
+010-1234-5678,심다운,20070310,여,down@gmail.com,,True,0
 010-1111-3333,신한길,19920530,남,1way@gmail.com,,True,0
 010-3333-4444,배힘찬,20070228,여,powerful@gmail.com,,True,0
 010-5555-6666,장하늘,19971110,남,longsky@gmail.com,MyProfile2.png,True,0

@@ -94,11 +94,28 @@ class Window_Main():
         # 데이터프레임 불러오기
         df_user, df_book, df_rent = load_dataframes()
 
-        # 대여 도서의 ISBN과 도서명, 대여자의 이름과 전화번호 구하기
-        book_isbn = self.bookinfo.get_isbn()
-        book_title = df_book["BOOK_TITLE"].loc[book_isbn]
-        user_phone = self.userinfo.get_phone()
-        user_name = df_user["USER_NAME"].loc[user_phone]
+        # 대여자의 이름과 전화번호 구하기
+        try:
+            user_phone = self.userinfo.get_phone()
+            user_name = df_user["USER_NAME"].loc[user_phone]
+        except KeyError:
+            if user_phone.strip('') == '':
+                messagebox.showinfo("도서 대여", f"회원 전화번호가 입력되지 않았습니다.")
+                return -1
+            else:
+                messagebox.showinfo("도서 대여", f"전화번호 {user_phone} 회원을 찾을 수 없습니다.")
+                return -2
+
+        # 대여 도서의 ISBN과 도서명 구하기
+        try:
+            book_isbn = self.bookinfo.get_isbn()
+            book_title = df_book["BOOK_TITLE"].loc[book_isbn]
+        except ValueError:
+            messagebox.showinfo("도서 대여", f"도서 ISBN이 입력되지 않았습니다.")
+            return -3
+        except KeyError:
+            messagebox.showinfo("도서 대여", f"ISBN {book_isbn} 도서를 찾을 수 없습니다.")
+            return -4
 
         # 대여일(오늘 날짜) 가져오기
         today = datetime.now()
@@ -152,11 +169,19 @@ class Window_Main():
         # 데이터프레임 불러오기
         df_user, df_book, df_rent = load_dataframes()
 
+
         # 선택한 도서에 대한 ISBN과 도서명, 대여번호, 대여자 전화번호 불러오기
-        book_isbn = self.bookinfo.get_isbn()
-        book_title = df_book["BOOK_TITLE"].loc[book_isbn]
-        rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
-        rent_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        try:
+            book_isbn = self.bookinfo.get_isbn()
+            book_title = df_book["BOOK_TITLE"].loc[book_isbn]
+            rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
+            rent_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        except ValueError:
+            messagebox.showinfo("도서 반납", f"도서 ISBN이 입력되지 않았습니다.")
+            return -3
+        except KeyError:
+            messagebox.showinfo("도서 반납", f"ISBN {book_isbn} 도서를 찾을 수 없습니다.")
+            return -4         
 
         # 이미 반납한 경우의 이벤트 처리
         if df_rent["RENT_RETURN_DATE"].loc[rent_seq] != -1:
