@@ -68,9 +68,6 @@ class Panel_Edit_User():
             photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
             self.label_image.configure(image=photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.label_image.image = photo_tk
-            
-            
-            
 
 
         self.Button_image = Button(window,text="이미지 추가",width=15,command=open_dialog)
