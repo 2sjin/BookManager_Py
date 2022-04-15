@@ -101,7 +101,7 @@ class Window_Add_Book():
     # 멤버 메소드: [확인] 버튼 이벤트
     def add_book(self):
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
-        df_book = df_book.set_index(df_book['BOOK_ISBN'])
+        # df_book.set_index('BOOK_ISBN', inplace=True)
         book_isbn = self.book_editor.get_isbn()
         book_title = self.book_editor.get_title()
         book_author = self.book_editor.get_author()
@@ -109,6 +109,11 @@ class Window_Add_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
+        str = messagebox.askquestion("새 도서 추가 - 보유도서", "ISBN {}을 추가하시겠습니까?".format(book_isbn))
+        if str == "yes":
+            if book_isbn in list(df_book['BOOK_ISBN']):
+                messagebox.showinfo("새 도서 추가 - 보유도서", "ISBN {}는(은) 현재 보유 중인 도서입니다.".format(book_isbn), icon='error')
+                return 0 
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
         "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": "1", "BOOK_LINK": book_link }])
         df_book = pd.concat([df_book,new_book])
