@@ -8,12 +8,16 @@ from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
 from Window_Search import Window_Search_User
 from Window_Search import Window_Search_Book
-
+from PIL import Image
+from PIL import Image,ImageTk
 SEARCH_ENTRY_WIDTH = 340
 SEARCH_BTN_WIDTH = 50
 SEARCH_HEIGHT = 24
 
 BTN_WIDTH = 75
+
+IMG_WIDTH = 120
+IMG_HEIGHT = 160
 
 INFO_BTN_Y = 280
 LABEL_FOR_TABLE_Y = 340
@@ -100,6 +104,13 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
+            
+        self.select_address = select_user["USER_IMAGE"].loc[self.phone]
+        self.photo = Image.open(self.select_address)
+        resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
+        self.photo_tk = ImageTk.PhotoImage(resize_photo)
+        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+        self.user_editor.label_image.image = self.photo_tk
         self.update_table()     # 대여 중인 도서 목록 새로고침
         
 
@@ -121,7 +132,12 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
+            
+        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+        self.user_editor.label_image.image = self.photo_tk
+
         self.update_table()     # 대여 중인 도서 목록 새로고침
+
         messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
 
 
@@ -129,13 +145,14 @@ class Panel_Show_User():
     def event_user_save(self):
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        print(df_user["USER_PHONE"].loc[self.phone])
         df_user["USER_PHONE"].loc[self.phone] = self.user_editor.get_phone()
         df_user["USER_NAME"].loc[self.phone] = self.user_editor.get_name()
         df_user["USER_BIRTH"].loc[self.phone] = self.user_editor.get_birthday()
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
-        #df_user["USER_IMAGE"].loc[self.phone] = "MyProfile2.png"
+        address = "sample_image/"+self.phone+".gif"
+        self.user_editor.photo.save(address,"gif")
+        df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
