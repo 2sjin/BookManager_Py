@@ -104,13 +104,14 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
+            
         self.select_address = select_user["USER_IMAGE"].loc[self.phone]
         self.photo = Image.open(self.select_address)
         resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
         self.photo_tk = ImageTk.PhotoImage(resize_photo)
         self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
         self.user_editor.label_image.image = self.photo_tk
-        
+        self.update_table()     # 대여 중인 도서 목록 새로고침
         
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
@@ -131,9 +132,14 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
+            
         self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
         self.user_editor.label_image.image = self.photo_tk
+
+        self.update_table()     # 대여 중인 도서 목록 새로고침
+
         messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+
 
     # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
     def event_user_save(self):

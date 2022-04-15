@@ -1,14 +1,14 @@
 USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
-010-1234-5678,½É´Ù¿î,20070310,¿©,down@gmail.com,sample_image/010-1234-5678.gif,TRUE,1
-010-1111-3333,½ÅÇÑ±æ,19920530,³²,1way@gmail.com,,TRUE,0
-010-3333-4444,¹èÈûÂù,20070228,¿©,powerful@gmail.com,,TRUE,0
-010-5555-6666,ÀåÇÏ´Ã,19971110,³²,longsky@gmail.com,,TRUE,0
-010-7777-8888,Ç³ÇÏ³ª,20030115,¿©,wind1@gmail.com,,TRUE,0
-010-9999-1111,¾ç¹Ì¸£,20081228,³²,dragon@gmail.com,,TRUE,0
-010-5678-1234,È«ÀÌ½½,20000824,¿©,red2@gmail.com,,TRUE,0
-010-1122-3344,¼ÕÀºº°,19930606,¿©,silverstar@gmail.com,,TRUE,0
-010-5566-7788,Àå±â»İ,19901019,¿©,happy@gmail.com,,TRUE,0
-010-8765-4321,°íÀ¸¶ä,20081129,³²,gobest@gmail.com,,TRUE,0
-010-7923-1077,Á¶ÁØÈ£,19980512,³²,hiwhwnsgh455@naver.com,,TRUE,0
-010-5443-4863,Á¶ÁØÈ£,19980512,³²,abc123@naver.com,,TRUE,0
-010-2222-2222,Äá¼ø ÀÌ,19920202,¿©,22222222@deu.ac.kr,,TRUE,0
+010-1234-5678,ì‹¬ë‹¤ìš´,20070310,ì—¬,down@gmail.com,sample_image/010-1234-5678.gif,TRUE,1
+010-1111-3333,ì‹ í•œê¸¸,19920530,ë‚¨,1way@gmail.com,,TRUE,0
+010-3333-4444,ë°°í˜ì°¬,20070228,ì—¬,powerful@gmail.com,,TRUE,0
+010-5555-6666,ì¥í•˜ëŠ˜,19971110,ë‚¨,longsky@gmail.com,,TRUE,0
+010-7777-8888,í’í•˜ë‚˜,20030115,ì—¬,wind1@gmail.com,,TRUE,0
+010-9999-1111,ì–‘ë¯¸ë¥´,20081228,ë‚¨,dragon@gmail.com,,TRUE,0
+010-5678-1234,í™ì´ìŠ¬,20000824,ì—¬,red2@gmail.com,,TRUE,0
+010-1122-3344,ì†ì€ë³„,19930606,ì—¬,silverstar@gmail.com,,TRUE,0
+010-5566-7788,ì¥ê¸°ì¨,19901019,ì—¬,happy@gmail.com,,TRUE,0
+010-8765-4321,ê³ ìœ¼ëœ¸,20081129,ë‚¨,gobest@gmail.com,,TRUE,0
+010-7923-1077,ì¡°ì¤€í˜¸,19980512,ë‚¨,hiwhwnsgh455@naver.com,,TRUE,0
+010-5443-4863,ì¡°ì¤€í˜¸,19980512,ë‚¨,abc123@naver.com,,TRUE,0
+010-2222-2222,ì½©ìˆœ ì´,19920202,ì—¬,22222222@deu.ac.kr,,TRUE,0
