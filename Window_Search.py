@@ -125,7 +125,10 @@ class Window_Search_Book():
         self.btn_cancel.place(x=500, y=360, width=SELECT_CANCEL_BTN_WIDTH)
 
         self.load_table()
-
+        def clicked_table(event):
+            select_Table = self.book_table.focus()
+            self.getTable = self.book_table.item(select_Table).get('values')
+        self.book_table.bind('<ButtonRelease-1>',clicked_table)
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -188,7 +191,9 @@ class Window_Search_Book():
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_book_select(self):
-        messagebox.showinfo("도서 선택", "도서 선택(이벤트 테스트)")
+        messagebox.showinfo("도서 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+        self.window.quit()
+        self.window.destroy
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
