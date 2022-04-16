@@ -72,46 +72,53 @@ class Panel_Show_User():
         self.label_for_table = Label(text="대여중인 도서 목록")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
 
-    # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
+    # 멤버 메소드: [검색] 버튼 이벤트: 회원 검색 결과 윈도우 띄우기
     def event_user_search(self):
-        self.Search = Window_Search_User()
+        if self.entry_search_user.get() !="":
+            self.Search = Window_Search_User(self.entry_search_user.get())
+        else:
+            self.Search = Window_Search_User()
+        self.entry_search_user.delete("0","end")
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        self.phone = self.Search.getTable[0]
-        # 행 찾기
-        select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
-        # entry 내용 삭제
-        self.user_editor.entry_name.delete("0","end")
-        self.user_editor.entry_phone.delete("0","end")
-        self.user_editor.entry_birthday.delete("0","end")
-        self.user_editor.entry_email.delete("0","end")
-        # 찾은 행 값 삽입하기
-        self.user_editor.entry_phone.insert(0,self.phone)
-        self.name = select_user["USER_NAME"].loc[self.phone]
-        self.user_editor.entry_name.insert(0,self.name)
-        self.birthday = str(select_user["USER_BIRTH"].loc[self.phone])
-        self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
-        self.user_editor.entry_birthday.insert(0,self.birthday)
-        self.gender = select_user["USER_SEX"].loc[self.phone]
-        if self.gender=="남":
-            self.user_editor.gender_rb1.select()
-        else:
-            self.user_editor.gender_rb2.select()
-        self.email = select_user["USER_MAIL"].loc[self.phone]
-        self.user_editor.entry_email.insert(0,self.email)
-        self.REG = select_user["USER_REG"].loc[self.phone]
-        if self.REG:
-            self.user_editor.registration_rb1.select()
-        else:
-            self.user_editor.registration_rb2.select()
-        self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
-        self.select_address = select_user["USER_IMAGE"].loc[self.phone]
-        self.photo = Image.open(self.select_address)
-        resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
-        self.photo_tk = ImageTk.PhotoImage(resize_photo)
-        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.user_editor.label_image.image = self.photo_tk
-        self.update_table()     # 대여 중인 도서 목록 새로고침
+        try:
+            self.phone = self.Search.getTable[0]
+            # 행 찾기
+            select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
+            # entry 내용 삭제
+            self.user_editor.entry_name.delete("0","end")
+            self.user_editor.entry_phone.delete("0","end")
+            self.user_editor.entry_birthday.delete("0","end")
+            self.user_editor.entry_email.delete("0","end")
+            # 찾은 행 값 삽입하기
+            self.user_editor.entry_phone.insert(0,self.phone)
+            self.name = select_user["USER_NAME"].loc[self.phone]
+            self.user_editor.entry_name.insert(0,self.name)
+            self.birthday = str(select_user["USER_BIRTH"].loc[self.phone])
+            self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
+            self.user_editor.entry_birthday.insert(0,self.birthday)
+            self.gender = select_user["USER_SEX"].loc[self.phone]
+            if self.gender=="남":
+                self.user_editor.gender_rb1.select()
+            else:
+                self.user_editor.gender_rb2.select()
+            self.email = select_user["USER_MAIL"].loc[self.phone]
+            self.user_editor.entry_email.insert(0,self.email)
+            self.REG = select_user["USER_REG"].loc[self.phone]
+            if self.REG:
+                self.user_editor.registration_rb1.select()
+            else:
+                self.user_editor.registration_rb2.select()
+            self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
+            self.select_address = select_user["USER_IMAGE"].loc[self.phone]
+            self.photo = Image.open(self.select_address)
+            resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
+            self.photo_tk = ImageTk.PhotoImage(resize_photo)
+            self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+            self.user_editor.label_image.image = self.photo_tk
+            self.update_table()     # 대여 중인 도서 목록 새로고침
+        except:
+            pass
         
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
@@ -346,7 +353,7 @@ class Panel_Show_Book():
             book_isbn = self.get_isbn()
         except ValueError:
             return 0
-
+        """
         # 선택한 도서의 최근 대여 이력 가져오기
         rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
         user_phone = df_rent["USER_PHONE"].loc[rent_seq]
@@ -358,6 +365,7 @@ class Panel_Show_Book():
         if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
             add_value = (user_phone, user_name, rent_date, rent_due_date)
             self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+        """
 
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
