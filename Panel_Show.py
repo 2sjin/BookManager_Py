@@ -350,20 +350,18 @@ class Panel_Show_Book():
             book_isbn = self.get_isbn()
         except ValueError:
             return 0
-        """
-        # 선택한 도서의 최근 대여 이력 가져오기
-        rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
-        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
-        user_name = df_user["USER_NAME"].loc[user_phone]
-        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
-        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
 
-        # 대여 중인 도서이면 테이블에 레코드 추가
-        if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
-            add_value = (user_phone, user_name, rent_date, rent_due_date)
-            self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
-        """
+        # # 선택한 도서의 최근 대여 이력 가져오기
+        # rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
+        # user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        # user_name = df_user["USER_NAME"].loc[user_phone]
+        # rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+        # rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
 
+        # # 대여 중인 도서이면 테이블에 레코드 추가
+        # if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
+        #     add_value = (user_phone, user_name, rent_date, rent_due_date)
+        #     self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
@@ -396,8 +394,6 @@ class Panel_Show_Book():
         self.book_editor.entry_link.insert("0",self.link)
         self.book_editor.entry_book_explain.insert("0",self.book_explain)
 
-
-
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
     def event_book_delete(self):
         messagebox.showinfo("도서 삭제", "도서 삭제 완료(이벤트 테스트)")
@@ -420,33 +416,68 @@ class Panel_Show_Book():
         self.book_editor.entry_link.insert("0",self.link)
         self.book_editor.entry_book_explain.insert("0",self.book_explain)
 
-    # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
+    # 멤버 메소드: 도서 정보 [수정] 버튼 이벤트
     def event_book_save(self):
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
-        pd.set_option('mode.chained_assignment',  None)
         # SettingWithCopyWarning 무시
-        df_book.set_index(df_book['BOOK_ISBN'], inplace=True)
+        pd.set_option('mode.chained_assignment',  None)
         ISBN = self.book_editor.get_isbn()
-        df_book.loc[ISBN, "BOOK_ISBN"] = self.book_editor.get_isbn()
-        df_book.loc[ISBN, "BOOK_TITLE"] = self.book_editor.get_title()
-        df_book.loc[ISBN, "BOOK_AUTHOR"] = self.book_editor.get_author()
-        df_book.loc[ISBN, "BOOK_PUB"] = self.book_editor.get_publisher()
-        df_book.loc[ISBN, "BOOK_PRICE"] = self.book_editor.get_price()
-        df_book.loc[ISBN, "BOOK_DESCRIPTION"] = self.book_editor.get_book_explain()
+        if self.isbn != ISBN:
+            print("ISBN: ", ISBN, type(ISBN))
+            print("self.isbn: ", self.isbn, type(self.isbn))
+            # BOOK.csv 파일의 BOOK_ISBN 리스트 타입 int -> str 
+            book_isbn_list = list(map(str, list(df_book["BOOK_ISBN"])))
+            if ISBN in book_isbn_list:
+                messagebox.showinfo("ISBN 중복", "ISBN {}는(은) 이미 등록된 도서입니다.".format(ISBN), icon='error')
+                return 0
+            df_book[df_book["BOOK_ISBN"] == self.isbn] = ISBN
+        df_book.set_index(df_book["BOOK_ISBN"].astype(str), inplace=True)
+
+        book_title = self.book_editor.get_title()
+        book_author = self.book_editor.get_author()
+        book_publisher = self.book_editor.get_publisher()
+        book_price = self.book_editor.get_price()
+        book_link = self.book_editor.get_link()
+        book_explain = self.book_editor.get_book_explain()
+
+        message = messagebox.askquestion("도서 수정", "{}({})을(를) 수정하시겠습니까?".format(book_title, ISBN))
+        if message == "yes":
+            if ISBN.lstrip()=="" or book_title.lstrip()=="" or book_author.lstrip()=="" \
+                or book_publisher.lstrip()=="" or book_price.lstrip()=="" or book_link.lstrip()=="" \
+                or book_explain.lstrip()=="":
+                messagebox.showinfo("도서 형식 오류", "도서 정보를 모두 입력해야합니다!", icon='error')
+                return 0
+            else:
+                if not ISBN.isdigit():
+                    messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
+                    return 0
+                if not book_price.isdigit():
+                    messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
+                return 0
+        elif message == 'no':
+            return 0
+        df_book.loc[ISBN, "BOOK_ISBN"] = self.isbn
+        df_book.loc[ISBN, "BOOK_TITLE"] = self.title
+        df_book.loc[ISBN, "BOOK_AUTHOR"] = self.author
+        df_book.loc[ISBN, "BOOK_PUB"] = self.publisher
+        df_book.loc[ISBN, "BOOK_PRICE"] = self.price
+        df_book.loc[ISBN, "BOOK_DESCRIPTION"] = self.book_explain
         df_book.loc[ISBN, "BOOK_IMAGE"] = "1"
-        df_book.loc[ISBN, "BOOK_LINK"] = self.book_editor.get_link()
+        df_book.loc[ISBN, "BOOK_LINK"] = self.link
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-
+    
         # 저장 -> 원래대로
 
-        self.isbn = self.book_editor.get_isbn()
-        self.title = self.book_editor.get_title()
-        self.author = self.book_editor.get_author()
-        self.publisher = self.book_editor.get_publisher()
-        self.price = self.book_editor.get_price()
-        self.book_explain = self.book_editor.get_book_explain()
-        self.link = self.book_editor.get_link()
+        self.isbn = ISBN
+        self.title = book_title
+        self.author = book_author
+        self.publisher = book_publisher
+        self.price = book_price
+        self.book_explain = book_explain
+        self.link = book_link
+
+        messagebox.showinfo("도서 수정 완료", "도서 정보를 수정하였습니다.")
 
     # 멤버 메소드: ISBN 리턴
     def get_isbn(self):

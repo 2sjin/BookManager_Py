@@ -1,3 +1,5 @@
+
+from operator import index
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -64,7 +66,7 @@ class Window_Search_User():
 
         self.user_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
         self.scrollbar = Scrollbar(self.user_table, orient=HORIZONTAL)
-        self.scrollbar.config()
+        self.scrollbar.config() 
 
     # 멤버 메소드: [검색] 버튼 이벤트
     def event_user_search(self):
@@ -99,8 +101,10 @@ class Window_Search_User():
                 user_reg = condition["USER_REG"].loc[user_phone]
                 user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
                 self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
+                
                 count+=1
             self.label_search_user.config(text=f"회원 검색 결과: {count} 개")
+
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
@@ -181,35 +185,34 @@ class Window_Search_Book():
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
         df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러올 때, ISBN이 실수형으로 처리되는 문제
-        index_key = self.entry_search_book.get().strip().split()
+        index_key = self.entry_search_book.get().strip()
         book_title_list = list(df_book["BOOK_TITLE"])
         book_author_list = list(df_book["BOOK_AUTHOR"])
-        for search_word in index_key:
-            for match_word in book_title_list:
-                if search_word in match_word:
-                    condition = df_book.loc[df_book["BOOK_TITLE"] == match_word]
-                    # condition 이 ISBN 은 다르지만 동인한 책이름을 여러개 찾는다면? 
-                    condition = list(condition["BOOK_ISBN"])
-                    for i in condition:
-                        if i in search_isbn_list:
-                            continue
-                        search_isbn_list.append(i)
-            for match_word in book_author_list:
-                if search_word in match_word:
-                    condition = df_book.loc[df_book["BOOK_AUTHOR"] == match_word]
-                    # condition 이 ISBN 은 다르지만 동인한 책 저자를 여러개 찾는다면? 
-                    condition = list(condition["BOOK_ISBN"])
-                    for i in condition:
-                        if i in search_isbn_list:
-                            continue
-                        search_isbn_list.append(i)
-            for ISBN in search_isbn_list:
-                book_isbn = df_book.loc[ISBN, "BOOK_ISBN"]
-                book_title = df_book.loc[ISBN, "BOOK_TITLE"]
-                book_author = df_book.loc[ISBN, "BOOK_AUTHOR"]
-                book_publish = df_book.loc[ISBN, "BOOK_PUB"]
-                book_add = (book_isbn, book_title, book_author, book_publish)
-                self.book_table.insert("","end",text="",value=book_add,iid=book_add[0])
+        for match_word in book_title_list:
+            # 문자열 검사를 일일이 해야하므로 결측치 값이 없도록 기본값 설정해줘야함.
+            if index_key in match_word:
+                condition = df_book.loc[df_book["BOOK_TITLE"] == match_word]
+                # condition 이 ISBN 은 다르지만 동인한 책이름을 여러개 찾는다면? 
+                condition = list(condition["BOOK_ISBN"])
+                for i in condition:
+                    if i in search_isbn_list:
+                        continue
+                    search_isbn_list.append(i)
+        for match_word in book_author_list:
+            if index_key in match_word:
+                condition = df_book.loc[df_book["BOOK_AUTHOR"] == match_word]
+                # condition 이 ISBN 은 다르지만 동인한 책 저자를 여러개 찾는다면? 
+                condition = list(condition["BOOK_ISBN"])
+                for i in condition:
+                    if i in search_isbn_list:
+                        continue
+                    search_isbn_list.append(i)
+        for ISBN in search_isbn_list:
+            book_title = df_book.loc[ISBN, "BOOK_TITLE"]
+            book_author = df_book.loc[ISBN, "BOOK_AUTHOR"]
+            book_publish = df_book.loc[ISBN, "BOOK_PUB"]
+            book_add = (ISBN, book_title, book_author, book_publish)
+            self.book_table.insert("","end",text="",value=book_add,iid=book_add[0])
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_book_select(self):
