@@ -84,7 +84,7 @@ class Window_Search_User():
                 user_reg = condition["USER_REG"].loc[user_phone]
                 user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
                 self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
-        except ValueError:
+        except:
             condition = df_user[df_user["USER_NAME"].str.contains(index_key)]
             for user_phone in condition["USER_PHONE"]:
                 user_name = condition["USER_NAME"].loc[user_phone]
