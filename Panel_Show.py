@@ -369,8 +369,22 @@ class Panel_Show_Book():
 
     # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
     def event_book_save(self):
-        messagebox.showinfo("도서 정보 수정", "도서 정보 수정 완료(이벤트 테스트)")
-   
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+        pd.set_option('mode.chained_assignment',  None)
+        # SettingWithCopyWarning 무시
+        df_book.set_index(df_book['BOOK_ISBN'], inplace=True)
+        ISBN = self.book_editor.get_isbn()
+        df_book.loc[ISBN, "BOOK_ISBN"] = self.book_editor.get_isbn()
+        df_book.loc[ISBN, "BOOK_TITLE"] = self.book_editor.get_title()
+        df_book.loc[ISBN, "BOOK_AUTHOR"] = self.book_editor.get_author()
+        df_book.loc[ISBN, "BOOK_PUB"] = self.book_editor.get_publisher()
+        df_book.loc[ISBN, "BOOK_PRICE"] = self.book_editor.get_price()
+        df_book.loc[ISBN, "BOOK_DESCRIPTION"] = self.book_editor.get_book_explain()
+        df_book.loc[ISBN, "BOOK_IMAGE"] = "1"
+        df_book.loc[ISBN, "BOOK_LINK"] = self.book_editor.get_link()
+
+        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
     # 멤버 메소드: ISBN 리턴
     def get_isbn(self):
         return self.book_editor.get_isbn()
