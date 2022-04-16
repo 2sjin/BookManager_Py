@@ -362,7 +362,37 @@ class Panel_Show_Book():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
-        Window_Search_Book()
+        self.Search = Window_Search_Book()
+        self.isbn = self.Search.getTable[0]
+        print(self.isbn)
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+        df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
+        # entry 내용 삭제
+        self.book_editor.entry_isbn.delete("0","end")
+        self.book_editor.entry_title.delete("0","end")
+        self.book_editor.entry_author.delete("0","end")
+        self.book_editor.entry_publisher.delete("0","end")
+        self.book_editor.entry_price.delete("0","end")
+        self.book_editor.entry_link.delete("0","end")
+        self.book_editor.entry_book_explain.delete("0","end")
+
+        self.title = df_book.loc[self.isbn, "BOOK_TITLE"]
+        self.author = df_book.loc[self.isbn, "BOOK_AUTHOR"]
+        self.publisher = df_book.loc[self.isbn, "BOOK_PUB"]
+        self.price = df_book.loc[self.isbn, "BOOK_PRICE"]
+        self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
+        self.image = df_book.loc[self.isbn, "BOOK_IMAGE"]
+        self.link = df_book.loc[self.isbn, "BOOK_LINK"]
+
+        self.book_editor.entry_isbn.insert("0",self.isbn)
+        self.book_editor.entry_title.insert("0",self.title)
+        self.book_editor.entry_author.insert("0",self.author)
+        self.book_editor.entry_publisher.insert("0",self.publisher)
+        self.book_editor.entry_price.insert("0",self.price)
+        self.book_editor.entry_link.insert("0",self.link)
+        self.book_editor.entry_book_explain.insert("0",self.book_explain)
+
+
 
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
     def event_book_delete(self):
@@ -370,7 +400,21 @@ class Panel_Show_Book():
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
-        messagebox.showinfo("원래대로", "도서 정보 원래대로(이벤트 테스트)")
+        self.book_editor.entry_isbn.delete("0","end")
+        self.book_editor.entry_title.delete("0","end")
+        self.book_editor.entry_author.delete("0","end")
+        self.book_editor.entry_publisher.delete("0","end")
+        self.book_editor.entry_price.delete("0","end")
+        self.book_editor.entry_link.delete("0","end")
+        self.book_editor.entry_book_explain.delete("0","end")
+
+        self.book_editor.entry_isbn.insert("0", self.isbn)
+        self.book_editor.entry_title.insert("0",self.title)
+        self.book_editor.entry_author.insert("0",self.author)
+        self.book_editor.entry_publisher.insert("0",self.publisher)
+        self.book_editor.entry_price.insert("0",self.price)
+        self.book_editor.entry_link.insert("0",self.link)
+        self.book_editor.entry_book_explain.insert("0",self.book_explain)
 
     # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
     def event_book_save(self):

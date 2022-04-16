@@ -1,6 +1,6 @@
 from doctest import master
 from tkinter import *
-from tkinter.filedialog import askopenfile, askopenfilename
+from tkinter.filedialog import askopenfilename
 from PIL import Image,ImageTk
 
 ENTRY_WIDTH = 200
