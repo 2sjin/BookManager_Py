@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from urllib.parse import uses_fragment
 import pandas as pd
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
@@ -92,7 +91,6 @@ class Window_Add_Book():
     # 멤버 메소드: [확인] 버튼 이벤트
     def add_book(self):
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
-        # df_book.set_index('BOOK_ISBN', inplace=True)
         book_isbn = self.book_editor.get_isbn()
         book_title = self.book_editor.get_title()
         book_author = self.book_editor.get_author()
@@ -108,6 +106,8 @@ class Window_Add_Book():
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
         "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": "1", "BOOK_LINK": book_link }])
         df_book = pd.concat([df_book,new_book])
-        df_book = df_book.set_index(df_book['BOOK_ISBN'])
+        df_book.set_index(df_book['BOOK_ISBN'], inplace=True)
+        # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러온 다음, 
+        # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 # ========================================================================================================

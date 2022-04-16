@@ -143,17 +143,48 @@ class Window_Search_Book():
 
         self.book_table["show"] = "headings"    # 열 인덱스를 표시하지 않음
 
-        sample_value_1 = ("9788970504773", "파이썬과 데이터 과학", "천인국, 박동규, 강영민", "생능출판")
-        sample_value_2 = ("9788970509563", "명품 자바 에센셜", "황기태", "생능출판")
-        self.book_table.insert("", "end", text="", value=sample_value_1, iid=sample_value_1[0])
-        self.book_table.insert("", "end", text="", value=sample_value_2, iid=sample_value_2[0])
-
         self.scrollbar = Scrollbar(self.book_table, orient=HORIZONTAL)
         self.scrollbar.config()
 
-    # 멤버 메소드: [선택] 버튼 이벤트
+    # 멤버 메소드: [검색] 버튼 이벤트
     def event_book_search(self):
-        messagebox.showinfo("도서 검색", "도서 검색(이벤트 테스트)")
+        # 테이블 초기화
+        for item in self.book_table.get_children():
+            self.book_table.delete(item)
+        # 중복 방지 리스트, 한꺼번에 출력 - Ex) 도서 제목과 저자의 검색어 포함이 동일한 경우
+        search_isbn_list = []
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+        df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
+        # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러올 때, ISBN이 실수형으로 처리되는 문제
+        index_key = self.entry_search_book.get().strip().split()
+        book_title_list = list(df_book["BOOK_TITLE"])
+        book_author_list = list(df_book["BOOK_AUTHOR"])
+        for search_word in index_key:
+            for match_word in book_title_list:
+                if search_word in match_word:
+                    condition = df_book.loc[df_book["BOOK_TITLE"] == match_word]
+                    # condition 이 ISBN 은 다르지만 동인한 책이름을 여러개 찾는다면? 
+                    condition = list(condition["BOOK_ISBN"])
+                    for i in condition:
+                        if i in search_isbn_list:
+                            continue
+                        search_isbn_list.append(i)
+            for match_word in book_author_list:
+                if search_word in match_word:
+                    condition = df_book.loc[df_book["BOOK_AUTHOR"] == match_word]
+                    # condition 이 ISBN 은 다르지만 동인한 책 저자를 여러개 찾는다면? 
+                    condition = list(condition["BOOK_ISBN"])
+                    for i in condition:
+                        if i in search_isbn_list:
+                            continue
+                        search_isbn_list.append(i)
+            for ISBN in search_isbn_list:
+                book_isbn = df_book.loc[ISBN, "BOOK_ISBN"]
+                book_title = df_book.loc[ISBN, "BOOK_TITLE"]
+                book_author = df_book.loc[ISBN, "BOOK_AUTHOR"]
+                book_publish = df_book.loc[ISBN, "BOOK_PUB"]
+                book_add = (book_isbn, book_title, book_author, book_publish)
+                self.book_table.insert("","end",text="",value=book_add,iid=book_add[0])
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_book_select(self):
