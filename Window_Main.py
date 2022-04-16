@@ -108,7 +108,7 @@ class Window_Main():
 
         # 대여 도서의 ISBN과 도서명 구하기
         try:
-            book_isbn = self.bookinfo.get_isbn()
+            book_isbn = self.bookinfo.isbn
             book_title = df_book["BOOK_TITLE"].loc[book_isbn]
         except ValueError:
             messagebox.showinfo("도서 대여", f"도서 ISBN이 입력되지 않았습니다.")
@@ -126,8 +126,10 @@ class Window_Main():
         due_format = due.strftime("%Y%m%d")
         
         # 해당 도서의 대여 이력 중 '대여 중'에 해당하는 이력만 추출
-        df_rent_rented = df_rent[["BOOK_ISBN"]][df_rent["RENT_RETURN_DATE"] == -1]
-        
+        condition_filter_isbn = df_rent["BOOK_ISBN"] == book_isbn
+        condition_filter_rented = df_rent["RENT_RETURN_DATE"] == -1
+        df_rent_rented = df_rent[["BOOK_ISBN"]][condition_filter_isbn & condition_filter_rented]
+
         # 대여가 불가능한 경우의 이벤트 처리
         if not df_rent_rented.empty:
             messagebox.showinfo("도서 대여", "이미 대여중인 도서입니다.")
@@ -169,10 +171,9 @@ class Window_Main():
         # 데이터프레임 불러오기
         df_user, df_book, df_rent = load_dataframes()
 
-
         # 선택한 도서에 대한 ISBN과 도서명, 대여번호, 대여자 전화번호 불러오기
         try:
-            book_isbn = self.bookinfo.get_isbn()
+            book_isbn = self.bookinfo.isbn
             book_title = df_book["BOOK_TITLE"].loc[book_isbn]
             rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
             rent_phone = df_rent["USER_PHONE"].loc[rent_seq]

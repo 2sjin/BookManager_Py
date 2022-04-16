@@ -175,6 +175,15 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
+
+        # 이미지 출력
+        self.select_address = select_user["USER_IMAGE"].loc[self.phone]
+        self.photo = Image.open(self.select_address)
+        resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
+        self.photo_tk = ImageTk.PhotoImage(resize_photo)
+        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+        self.user_editor.label_image.image = self.photo_tk
+
         self.update_table()     # 대여 중인 도서 목록 새로고침
 
     # 멤버 메소드: 회원 정보 [수정] 버튼 이벤트
@@ -351,17 +360,17 @@ class Panel_Show_Book():
         except ValueError:
             return 0
 
-        # # 선택한 도서의 최근 대여 이력 가져오기
-        # rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
-        # user_phone = df_rent["USER_PHONE"].loc[rent_seq]
-        # user_name = df_user["USER_NAME"].loc[user_phone]
-        # rent_date = df_rent["RENT_DATE"].loc[rent_seq]
-        # rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        # 선택한 도서의 최근 대여 이력 가져오기
+        rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
+        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        user_name = df_user["USER_NAME"].loc[user_phone]
+        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
 
-        # # 대여 중인 도서이면 테이블에 레코드 추가
-        # if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
-        #     add_value = (user_phone, user_name, rent_date, rent_due_date)
-        #     self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+        # 대여 중인 도서이면 테이블에 레코드 추가
+        if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
+            add_value = (user_phone, user_name, rent_date, rent_due_date)
+            self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
