@@ -55,8 +55,8 @@ class Panel_Edit_User():
         self.gender_rb1.place(x=x+60,y=y+75)
         self.gender_rb2.place(x=x+140,y=y+75)
         self.RadioButton_registration = IntVar(window)
-        self.registration_rb1= Radiobutton(window, text="등록",variable=self.RadioButton_registration,value=1)
-        self.registration_rb2= Radiobutton(window, text="탈퇴(정보 유지)",variable=self.RadioButton_registration,value=2)
+        self.registration_rb1= Radiobutton(window, text="등록",variable=self.RadioButton_registration,value=True)
+        self.registration_rb2= Radiobutton(window, text="탈퇴(정보 유지)",variable=self.RadioButton_registration,value=False)
         self.registration_rb1.place(x=x+60,y=y+125)
         self.registration_rb2.place(x=x+140,y=y+125)
         
@@ -87,12 +87,17 @@ class Panel_Edit_User():
     def get_gender(self):
         gender_text = self.RadioButton_gender.get()
         return gender_text
+    def get_REG(self):
+        reg_boolean = bool(self.RadioButton_registration.get())
+        return reg_boolean
     def forget_regis(self):
         self.label_registration.place_forget()
         self.registration_rb1.place_forget()
         self.registration_rb2.place_forget()
     def self_return(self):
         return self
+    def get_birthday2(self):
+        return self.entry_birthday.get()
 
 
 # =======================================================================================

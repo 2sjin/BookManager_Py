@@ -66,7 +66,7 @@ class Panel_Show_User():
         self.btn_refresh_user = Button(window, text="원래대로", command=self.event_user_refresh)
         self.btn_refresh_user.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_user = Button(window, text="저장", command=self.event_user_save)
+        self.btn_save_user = Button(window, text="수정", command=self.event_user_save)
         self.btn_save_user.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여중인 도서 목록")
@@ -104,7 +104,7 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
-            
+        self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
         self.select_address = select_user["USER_IMAGE"].loc[self.phone]
         self.photo = Image.open(self.select_address)
         resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
@@ -173,23 +173,57 @@ class Panel_Show_User():
             self.user_editor.registration_rb2.select()
         self.update_table()     # 대여 중인 도서 목록 새로고침
 
-    # 멤버 메소드: 회원 정보 [저장] 버튼 이벤트
+    # 멤버 메소드: 회원 정보 [수정] 버튼 이벤트
     def event_user_save(self):
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        user_phone = df_user["USER_PHONE"].tolist()
         df_user["USER_PHONE"].loc[self.phone] = self.user_editor.get_phone()
         df_user["USER_NAME"].loc[self.phone] = self.user_editor.get_name()
         df_user["USER_BIRTH"].loc[self.phone] = self.user_editor.get_birthday()
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
+        df_user["USER_REG"].loc[self.phone] = self.user_editor.get_REG()
         address = "sample_image/"+self.phone+".gif"
+        user_phone.remove(self.phone)
+        if self.rent_count > 0 and (self.user_editor.get_REG() == False):    # 라디오버튼 '탈퇴'에 체크할 경우에만 조건 확인
+            messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
+            return 0
+        if len(self.user_editor.get_phone()) < 13 and self.user_editor.get_phone().count("-") < 2:
+            messagebox.showinfo("전화번호 형식 오류", "□□□-□□□□-□□□□ 형식을 지켜주세요!!")
+            return 0
+        if self.user_editor.get_phone() in user_phone:
+            messagebox.showinfo("전화번호 중복", "전화번호"+self.user_editor.get_phone()+"가 중복되었습니다.")
+            return 0
+        if self.user_editor.get_name() =="":
+            messagebox.showinfo("이름 빈공간 발생", "이름을 적어주세요!!")
+            return 0
+        if len(self.user_editor.get_birthday2()) < 10 and self.user_editor.get_birthday2().count("-") < 2:
+            messagebox.showinfo("생일 형식 오류", "□□□□-□□-□□ 형식을 지켜주세요!!")
+            return 0
+        df_user["USER_IMAGE"].loc[self.phone] = address
+        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+
+        # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [원래대로] 버튼을 눌렀을 때 수정한 정보 반영하기 위함)
+        user_phone = df_user["USER_PHONE"].tolist()
+        self.phone = df_user["USER_PHONE"].loc[self.phone]
+        self.name = df_user["USER_NAME"].loc[self.phone]
+        self.birthday = df_user["USER_BIRTH"].loc[self.phone]
+        self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
+        self.gender = df_user["USER_SEX"].loc[self.phone]
+        self.mail = df_user["USER_MAIL"].loc[self.phone]
+        self.REG = df_user["USER_REG"].loc[self.phone]
+        self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
+        address = "sample_image/"+self.phone+".gif"
+        user_phone.remove(self.phone)
+
+        # 이미지 파일 저장("전화번호.gif")
         try:
             self.user_editor.photo.save(address,"gif")
         except:
             pass
-        
-        df_user["USER_IMAGE"].loc[self.phone] = address
-        df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+
+        messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
     def load_table(self, window, x, y):
