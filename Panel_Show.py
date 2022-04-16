@@ -104,7 +104,7 @@ class Panel_Show_User():
             self.user_editor.registration_rb1.select()
         else:
             self.user_editor.registration_rb2.select()
-            
+        self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
         self.select_address = select_user["USER_IMAGE"].loc[self.phone]
         self.photo = Image.open(self.select_address)
         resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
@@ -185,6 +185,9 @@ class Panel_Show_User():
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         address = "sample_image/"+self.phone+".gif"
         user_phone.remove(self.phone)
+        if self.rent_count > 0 :
+            messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
+            return 0
         if len(self.user_editor.get_phone()) < 13 and self.user_editor.get_phone().count("-") < 2:
             messagebox.showinfo("전화번호 형식 오류", "□□□-□□□□-□□□□ 형식을 지켜주세요!!")
             return 0
@@ -197,7 +200,6 @@ class Panel_Show_User():
         if len(self.user_editor.get_birthday2()) < 10 and self.user_editor.get_birthday2().count("-") < 2:
             messagebox.showinfo("생일 형식 오류", "□□□□-□□-□□ 형식을 지켜주세요!!")
             return 0
-
         df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
 
