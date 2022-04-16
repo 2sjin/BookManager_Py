@@ -400,7 +400,21 @@ class Panel_Show_Book():
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
-        messagebox.showinfo("원래대로", "도서 정보 원래대로(이벤트 테스트)")
+        self.book_editor.entry_isbn.delete("0","end")
+        self.book_editor.entry_title.delete("0","end")
+        self.book_editor.entry_author.delete("0","end")
+        self.book_editor.entry_publisher.delete("0","end")
+        self.book_editor.entry_price.delete("0","end")
+        self.book_editor.entry_link.delete("0","end")
+        self.book_editor.entry_book_explain.delete("0","end")
+
+        self.book_editor.entry_isbn.insert("0", self.isbn)
+        self.book_editor.entry_title.insert("0",self.title)
+        self.book_editor.entry_author.insert("0",self.author)
+        self.book_editor.entry_publisher.insert("0",self.publisher)
+        self.book_editor.entry_price.insert("0",self.price)
+        self.book_editor.entry_link.insert("0",self.link)
+        self.book_editor.entry_book_explain.insert("0",self.book_explain)
 
     # 멤버 메소드: 도서 정보 [저장] 버튼 이벤트
     def event_book_save(self):
