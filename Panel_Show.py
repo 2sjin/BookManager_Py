@@ -306,7 +306,7 @@ class Panel_Show_Book():
         self.btn_refresh_book = Button(window, text="원래대로", command=self.event_book_refresh)
         self.btn_refresh_book.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="저장", command=self.event_book_save)
+        self.btn_save_book = Button(window, text="수정", command=self.event_book_save)
         self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여 정보")
@@ -364,7 +364,6 @@ class Panel_Show_Book():
     def event_book_search(self):
         self.Search = Window_Search_Book()
         self.isbn = self.Search.getTable[0]
-        print(self.isbn)
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
         df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
         # entry 내용 삭제
@@ -433,6 +432,16 @@ class Panel_Show_Book():
         df_book.loc[ISBN, "BOOK_LINK"] = self.book_editor.get_link()
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
+        # 저장 -> 원래대로
+
+        self.isbn = self.book_editor.get_isbn()
+        self.title = self.book_editor.get_title()
+        self.author = self.book_editor.get_author()
+        self.publisher = self.book_editor.get_publisher()
+        self.price = self.book_editor.get_price()
+        self.book_explain = self.book_editor.get_book_explain()
+        self.link = self.book_editor.get_link()
 
     # 멤버 메소드: ISBN 리턴
     def get_isbn(self):
