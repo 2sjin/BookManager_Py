@@ -74,10 +74,7 @@ class Panel_Show_User():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 회원 검색 결과 윈도우 띄우기
     def event_user_search(self):
-        if self.entry_search_user.get() !="":
-            self.Search = Window_Search_User(self.entry_search_user.get())
-        else:
-            self.Search = Window_Search_User()
+        self.Search = Window_Search_User(self.entry_search_user.get())
         self.entry_search_user.delete("0","end")
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])

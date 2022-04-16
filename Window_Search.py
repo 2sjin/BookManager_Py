@@ -104,9 +104,12 @@ class Window_Search_User():
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
-        messagebox.showinfo("회원 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
-        self.window.quit()
-        self.window.destroy()
+        try:    
+            messagebox.showinfo("회원 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+            self.window.quit()
+            self.window.destroy()
+        except:
+            messagebox.showinfo("회원 선택", "테이블을 선택해주세요!")
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):

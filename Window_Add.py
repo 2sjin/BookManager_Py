@@ -46,9 +46,6 @@ class Window_Add_User():
         address = "sample_image/"+user_phone+".gif"
         new_user = pd.DataFrame.from_dict([{ "USER_PHONE": user_phone, "USER_NAME": user_name,"USER_BIRTH": user_birthday,
         "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": address, "USER_REG": True,"USER_RENT_CNT": 0 }])
-        
-        df_user = pd.concat([df_user,new_user])
-        df_user = df_user.set_index(df_user['USER_PHONE'])
         if len(self.user_editor.get_phone()) < 13 and self.user_editor.get_phone().count("-") < 2:
             messagebox.showinfo("전화번호 형식 오류", "□□□-□□□□-□□□□ 형식을 지켜주세요!!")
             return 0
@@ -68,6 +65,8 @@ class Window_Add_User():
             except:
                 image = Image.open("sample_image/Default_Image.gif")
                 image.save(address,"gif")
+            df_user = pd.concat([df_user,new_user])
+            df_user = df_user.set_index(df_user['USER_PHONE'])
             df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
             self.window.quit()
             self.window.destroy()
