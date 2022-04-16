@@ -107,16 +107,31 @@ class Window_Add_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
-        str = messagebox.askquestion("새 도서 추가 - 보유도서", "ISBN {}을 추가하시겠습니까?".format(book_isbn))
+        str = messagebox.askquestion("신규 도서 추가", "{}({})을(를) 추가하시겠습니까?".format(book_title, book_isbn))
         if str == "yes":
-            if book_isbn in list(df_book['BOOK_ISBN']):
-                messagebox.showinfo("새 도서 추가 - 보유도서", "ISBN {}는(은) 현재 보유 중인 도서입니다.".format(book_isbn), icon='error')
-                return 0 
+            if book_isbn.lstrip()=="" or book_title.lstrip()=="" or book_author.lstrip()=="" \
+                or book_publisher.lstrip()=="" or book_price.lstrip()=="" or book_link.lstrip()=="" \
+                or book_explain.lstrip()=="":
+                messagebox.showinfo("도서 형식 오류", "도서 정보를 모두 입력해야합니다!", icon='error')
+                return 0
+            else:
+                if book_isbn in list(df_book['BOOK_ISBN']):
+                    messagebox.showinfo("ISBN 중복", "ISBN {}는(은) 이미 등록된 도서입니다.".format(book_isbn), icon='error')
+                    return 0
+                if not book_isbn.isdigit():
+                    messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
+                    return 0
+                if not book_price.isdigit():
+                    messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
+                return 0
+        elif str == 'no':
+            return 0
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
         "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": "1", "BOOK_LINK": book_link }])
         df_book = pd.concat([df_book,new_book])
         df_book.set_index(df_book['BOOK_ISBN'], inplace=True)
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러온 다음, 
-        # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제
+        # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제 발생
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+        messagebox.showinfo("새 도서 추가 완료", "ISBN {}이 등록되었습니다.".format(book_isbn))
 # ========================================================================================================

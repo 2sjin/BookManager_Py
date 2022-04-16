@@ -169,18 +169,19 @@ class Panel_Edit_Book():
 
     # 멤버 메소드: ISBN 등 도서의 속성 리턴
     def get_isbn(self):
-        return int(self.entry_isbn.get())
+        # 예외처리를 하기 위해서 get_isbn()의 값을 문자열로 입력받음.
+        return self.entry_isbn.get().rstrip()
     def get_title(self):
-        return self.entry_title.get()
+        return self.entry_title.get().rstrip()
     def get_author(self):
-        return self.entry_author.get()
+        return self.entry_author.get().rstrip()
     def get_publisher(self):
-        return self.entry_publisher.get()
+        return self.entry_publisher.get().rstrip()
     def get_price(self):
-        return self.entry_price.get()
+        return self.entry_price.get().rstrip()
     def get_link(self):
-        return self.entry_link.get()
+        return self.entry_link.get().rstrip()
     def get_book_explain(self):
-        return self.entry_book_explain.get()
+        return self.entry_book_explain.get().rstrip()
 
 # =======================================================================================
