@@ -19,20 +19,19 @@ DIR_CSV_RENT = "csv/rent.csv"
 # 클래스: 회원 검색 결과 윈도우
 # =========================================================
 class Window_Search_User():
-
     # 생성자
-    def __init__(self):
+    def __init__(self,show_entry=""):
         self.window = Tk()
         self.window.title("회원 검색 결과")
         self.window.geometry(WINDOW_GEOMETRY)
-
         self.entry_search_user = Entry(self.window)
         self.entry_search_user.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
+        self.entry_search_user.insert(0,show_entry)
 
         self.btn_search_user = Button(self.window, text="검색", command=self.event_user_search)
         self.btn_search_user.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
         
-        self.label_search_user = Label(self.window, text="회원 검색 결과: 2 개")
+        self.label_search_user = Label(self.window, text="회원 검색 결과: 0 개")
         self.label_search_user.place(x=10, y=75)
 
         self.btn_select_user = Button(self.window, text="선택", command=self.event_user_select)
@@ -46,6 +45,8 @@ class Window_Search_User():
             select_Table = self.user_table.focus()
             self.getTable = self.user_table.item(select_Table).get('values')
         self.user_table.bind('<ButtonRelease-1>',clicked_table)
+        if show_entry !="":
+            self.event_user_search()
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -76,6 +77,7 @@ class Window_Search_User():
         try:
             int(index_key[0])
             condition = df_user[df_user["USER_PHONE"].str.contains(index_key)]
+            count = 0
             for user_phone in condition["USER_PHONE"]:
                 user_name = condition["USER_NAME"].loc[user_phone]
                 user_birthday = condition["USER_BIRTH"].loc[user_phone]
@@ -84,8 +86,11 @@ class Window_Search_User():
                 user_reg = condition["USER_REG"].loc[user_phone]
                 user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
                 self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
+                count+=1
+            self.label_search_user.config(text=f"회원 검색 결과: {count} 개")
         except:
             condition = df_user[df_user["USER_NAME"].str.contains(index_key)]
+            count = 0
             for user_phone in condition["USER_PHONE"]:
                 user_name = condition["USER_NAME"].loc[user_phone]
                 user_birthday = condition["USER_BIRTH"].loc[user_phone]
@@ -94,13 +99,19 @@ class Window_Search_User():
                 user_reg = condition["USER_REG"].loc[user_phone]
                 user_add = (user_phone,user_name,user_birthday,user_sex,user_email,user_reg)
                 self.user_table.insert("","end",text="",value=user_add,iid=user_add[0])
+                
+                count+=1
+            self.label_search_user.config(text=f"회원 검색 결과: {count} 개")
 
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_user_select(self):
-        messagebox.showinfo("회원 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
-        self.window.quit()
-        self.window.destroy()
+        try:    
+            messagebox.showinfo("회원 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+            self.window.quit()
+            self.window.destroy()
+        except:
+            messagebox.showinfo("회원 선택", "테이블을 선택해주세요!")
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
