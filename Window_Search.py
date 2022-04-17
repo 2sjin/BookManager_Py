@@ -172,7 +172,6 @@ class Window_Search_Book():
         # 중복 방지 리스트, 한꺼번에 출력 - Ex) 도서 제목과 저자의 검색어 포함이 동일한 경우
         search_isbn_list = []
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
-        df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러올 때, ISBN이 실수형으로 처리되는 문제
         index_key = self.entry_search_book.get().strip()
         book_title_list = list(df_book["BOOK_TITLE"])
@@ -196,6 +195,7 @@ class Window_Search_Book():
                     if i in search_isbn_list:
                         continue
                     search_isbn_list.append(i)
+        df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
         for ISBN in search_isbn_list:
             book_title = df_book.loc[ISBN, "BOOK_TITLE"]
             book_author = df_book.loc[ISBN, "BOOK_AUTHOR"]
