@@ -9,7 +9,6 @@ from PIL import Image,ImageTk
 DIR_CSV_USER = "csv/user.csv"
 DIR_CSV_BOOK = "csv/book.csv"
 DIR_CSV_RENT = "csv/rent.csv"
-
 # ========================================================================================================
 # 클래스: 신규 회원 추가 윈도우
 # ========================================================================================================
@@ -99,6 +98,7 @@ class Window_Add_Book():
     # 멤버 메소드: [확인] 버튼 이벤트
     def add_book(self):
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+
         book_isbn = self.book_editor.get_isbn()
         book_title = self.book_editor.get_title()
         book_author = self.book_editor.get_author()
@@ -113,20 +113,25 @@ class Window_Add_Book():
                 or book_explain.lstrip()=="":
                 messagebox.showinfo("도서 형식 오류", "도서 정보를 모두 입력해야합니다!", icon='error')
                 return 0
-            else:
-                if book_isbn in list(df_book['BOOK_ISBN']):
-                    messagebox.showinfo("ISBN 중복", "ISBN {}는(은) 이미 등록된 도서입니다.".format(book_isbn), icon='error')
-                    return 0
-                if not book_isbn.isdigit():
-                    messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
-                    return 0
-                if not book_price.isdigit():
-                    messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
+            # ISBN 중복검사를 위한 형식검사 우선
+            if not book_isbn.isdigit():
+                messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
+                return 0
+            if int(book_isbn) in list(df_book['BOOK_ISBN']):
+                messagebox.showinfo("ISBN 중복", "ISBN {}는(은) 이미 등록된 도서입니다.".format(book_isbn), icon='error')
+                return 0
+            if not book_price.isdigit():
+                messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
                 return 0
         elif str == 'no':
             return 0
+
+        book_isbn = int(book_isbn)
+        book_price = int(book_price)
+
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
         "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": "1", "BOOK_LINK": book_link }])
+
         df_book = pd.concat([df_book,new_book])
         df_book.set_index(df_book['BOOK_ISBN'], inplace=True)
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러온 다음, 
