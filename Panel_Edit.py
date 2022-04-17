@@ -1,4 +1,3 @@
-from doctest import master
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from PIL import Image,ImageTk
@@ -169,7 +168,8 @@ class Panel_Edit_Book():
 
     # 멤버 메소드: ISBN 등 도서의 속성 리턴
     def get_isbn(self):
-        return int(self.entry_isbn.get().rstrip())
+        return self.entry_isbn.get().rstrip()
+        # ISBN 형식 검사 int형으로 입력받게 되면 문자열 입력시 예외처리와 무관하게 바로 오류가 뜸.
     def get_title(self):
         return self.entry_title.get().rstrip()
     def get_author(self):
@@ -177,7 +177,8 @@ class Panel_Edit_Book():
     def get_publisher(self):
         return self.entry_publisher.get().rstrip()
     def get_price(self):
-        return int(self.entry_price.get().rstrip())
+        return self.entry_price.get().rstrip()
+        # 가격 형식 검사 위와 동일
     def get_link(self):
         return self.entry_link.get().rstrip()
     def get_book_explain(self):
