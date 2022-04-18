@@ -110,7 +110,7 @@ class Window_Add_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
-        book_image = "sample_image/"+book_isbn+".gif"
+        book_image = "../BookManager/sample_image/"+book_isbn+".gif"
 
         message = messagebox.askquestion("신규 도서 추가", "{}({})을(를) 추가하시겠습니까?".format(book_title, book_isbn))
         if message == "yes":
@@ -129,13 +129,13 @@ class Window_Add_Book():
             if not book_price.isdigit():
                 messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
                 return 0
-            try:
-                self.book_editor.image.save(book_image, "gif")
-            except:
-                messagebox.showinfo("이미지 형식 오류", "도서 이미지를 입력해야합니다!", icon='error')
-                return 0
-
         elif message == 'no':
+            return 0
+
+        try:
+            self.book_editor.image.save(book_image, "gif")
+        except:
+            messagebox.showinfo("이미지 형식 오류", "도서 이미지를 입력해야합니다!", icon='error')
             return 0
 
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
@@ -146,8 +146,8 @@ class Window_Add_Book():
 
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러온 다음, 
         # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제 발생
+        
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-
         messagebox.showinfo("새 도서 추가 완료", "ISBN {}이 등록되었습니다.".format(book_isbn))
         self.window.quit()
         self.window.destroy()
