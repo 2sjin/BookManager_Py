@@ -361,7 +361,7 @@ class Panel_Show_Book():
         except ValueError:
             return 0
 
-        # # 선택한 도서의 최근 대여 이력 가져오기
+        # 선택한 도서의 최근 대여 이력 가져오기
         # rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
         # user_phone = df_rent["USER_PHONE"].loc[rent_seq]
         # user_name = df_user["USER_NAME"].loc[user_phone]
@@ -375,10 +375,65 @@ class Panel_Show_Book():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
-        self.Search = Window_Search_Book()
-        self.isbn = self.Search.getTable[0]
-        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+        try:
+            self.Search = Window_Search_Book()
+            self.isbn = self.Search.getTable[0]
+            df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
+            df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
+
+            # entry 내용 삭제
+            self.book_editor.entry_isbn.delete("0","end")
+            self.book_editor.entry_title.delete("0","end")
+            self.book_editor.entry_author.delete("0","end")
+            self.book_editor.entry_publisher.delete("0","end")
+            self.book_editor.entry_price.delete("0","end")
+            self.book_editor.entry_link.delete("0","end")
+            self.book_editor.entry_book_explain.delete("0","end")
+
+            # 도서 정보 검색
+            self.title = df_book.loc[self.isbn, "BOOK_TITLE"]
+            self.author = df_book.loc[self.isbn, "BOOK_AUTHOR"]
+            self.publisher = df_book.loc[self.isbn, "BOOK_PUB"]
+            self.price = df_book.loc[self.isbn, "BOOK_PRICE"]
+            self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
+            self.image_address = df_book.loc[self.isbn, "BOOK_IMAGE"]
+            self.link = df_book.loc[self.isbn, "BOOK_LINK"]
+
+            # 도서 이미지 찾기, 조절
+            image = Image.open(self.image_address)
+            reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
+            self.image_tk = ImageTk.PhotoImage(reisze_image)
+
+            # 도서 정보 출력
+            self.book_editor.entry_isbn.insert("0",self.isbn)
+            self.book_editor.entry_title.insert("0",self.title)
+            self.book_editor.entry_author.insert("0",self.author)
+            self.book_editor.entry_publisher.insert("0",self.publisher)
+            self.book_editor.entry_price.insert("0",self.price)
+            self.book_editor.entry_link.insert("0",self.link)
+            self.book_editor.entry_book_explain.insert("0",self.book_explain)
+            self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+            self.book_editor.label_image.image = self.image_tk
+            self.update_table()
+        except:
+            pass
+
+    # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
+    def event_book_delete(self):
+        
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949', dtype= {"BOOK_TITLE":object, "BOOK_AUTHOR":object, \
+            "BOOK_PUB":object, "BOOK_DESCRIPTION": object, "BOOK_LINK": object})
         df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
+
+        df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
+        df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
+
+        if self.isbn in list(df_rent["BOOK_ISBN"]):
+            messagebox.showinfo("도서 정보 삭제 불가", "{}({})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
+            return 0
+        df_book = df_book.drop(self.isbn)
+        messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
+
 
         # entry 내용 삭제
         self.book_editor.entry_isbn.delete("0","end")
@@ -388,36 +443,6 @@ class Panel_Show_Book():
         self.book_editor.entry_price.delete("0","end")
         self.book_editor.entry_link.delete("0","end")
         self.book_editor.entry_book_explain.delete("0","end")
-
-        # 도서 정보 검색
-        self.title = df_book.loc[self.isbn, "BOOK_TITLE"]
-        self.author = df_book.loc[self.isbn, "BOOK_AUTHOR"]
-        self.publisher = df_book.loc[self.isbn, "BOOK_PUB"]
-        self.price = df_book.loc[self.isbn, "BOOK_PRICE"]
-        self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
-        self.image_address = df_book.loc[self.isbn, "BOOK_IMAGE"]
-        self.link = df_book.loc[self.isbn, "BOOK_LINK"]
-
-        # 도서 이미지 찾기, 조절
-        image = Image.open(self.image_address)
-        reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-        self.image_tk = ImageTk.PhotoImage(reisze_image)
-
-        # 도서 정보 출력
-        self.book_editor.entry_isbn.insert("0",self.isbn)
-        self.book_editor.entry_title.insert("0",self.title)
-        self.book_editor.entry_author.insert("0",self.author)
-        self.book_editor.entry_publisher.insert("0",self.publisher)
-        self.book_editor.entry_price.insert("0",self.price)
-        self.book_editor.entry_link.insert("0",self.link)
-        self.book_editor.entry_book_explain.insert("0",self.book_explain)
-        self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.book_editor.label_image.image = self.image_tk
-
-
-    # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
-    def event_book_delete(self):
-        messagebox.showinfo("도서 삭제", "도서 삭제 완료(이벤트 테스트)")
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
@@ -432,15 +457,20 @@ class Panel_Show_Book():
         self.book_editor.entry_book_explain.delete("0","end")
 
         # 도서 정보 출력
-        self.book_editor.entry_isbn.insert("0", self.isbn)
-        self.book_editor.entry_title.insert("0",self.title)
-        self.book_editor.entry_author.insert("0",self.author)
-        self.book_editor.entry_publisher.insert("0",self.publisher)
-        self.book_editor.entry_price.insert("0",self.price)
-        self.book_editor.entry_link.insert("0",self.link)
-        self.book_editor.entry_book_explain.insert("0",self.book_explain)
-        self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.book_editor.label_image.image = self.image_tk
+        # 아무 검색 하지않고 원래대로 버튼 클릭시 오류 수정
+        try:
+            self.book_editor.entry_isbn.insert("0", self.isbn)
+            self.book_editor.entry_title.insert("0",self.title)
+            self.book_editor.entry_author.insert("0",self.author)
+            self.book_editor.entry_publisher.insert("0",self.publisher)
+            self.book_editor.entry_price.insert("0",self.price)
+            self.book_editor.entry_link.insert("0",self.link)
+            self.book_editor.entry_book_explain.insert("0",self.book_explain)
+            self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+            self.book_editor.label_image.image = self.image_tk
+            self.update_table()
+        except:
+            return 0
 
     # 멤버 메소드: 도서 정보 [수정] 버튼 이벤트
     def event_book_save(self):
@@ -490,7 +520,9 @@ class Panel_Show_Book():
                 self.book_editor.image.save(book_image_address, "gif")
                 image = Image.open(book_image_address)    
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-                self.image_tk = ImageTk.PhotoImage(resize_image)    
+                self.image_tk = ImageTk.PhotoImage(resize_image)
+                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+                self.book_editor.label_image.image = self.image_tk
             # (ISBN 과 파일 변경이 동일한 경우)            
             except:
                 # 파일 ISBN, 사진 그대로 저장
@@ -498,6 +530,8 @@ class Panel_Show_Book():
                 image.save(book_image_address, "gif") # (덮어쓰기)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)
+                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+                self.book_editor.label_image.image = self.image_tk
         else:
             try:
                 # ISBN, 파일 모두 변경
@@ -519,10 +553,6 @@ class Panel_Show_Book():
                 self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
                 self.book_editor.label_image.image = self.image_tk
                 remove(self.image_address)
-
-        # 이미지 -> 원래대로
-        self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.book_editor.label_image.image = self.image_tk
 
         ISBN = int(ISBN)
         book_price = int(book_price)
