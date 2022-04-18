@@ -128,13 +128,14 @@ class Window_Search_User():
 class Window_Search_Book():
 
     # 생성자
-    def __init__(self):
+    def __init__(self, show_entry=""):
         self.window = Tk()
         self.window.title("도서 검색 결과")
         self.window.geometry(WINDOW_GEOMETRY)
 
         self.entry_search_book = Entry(self.window)
         self.entry_search_book.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
+        self.entry_search_book.insert(0,show_entry)
 
         self.btn_search_book = Button(self.window, text="검색", command=self.event_book_search)
         self.btn_search_book.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
@@ -153,6 +154,8 @@ class Window_Search_Book():
             select_Table = self.book_table.focus()
             self.getTable = self.book_table.item(select_Table).get('values')
         self.book_table.bind('<ButtonRelease-1>',clicked_table)
+        if show_entry != "":
+            self.event_book_search()
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -217,9 +220,12 @@ class Window_Search_Book():
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_book_select(self):
-        messagebox.showinfo("도서 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
-        self.window.quit()
-        self.window.destroy
+        try:    
+            messagebox.showinfo("도서 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+            self.window.quit()
+            self.window.destroy()
+        except:
+            messagebox.showinfo("도서 선택", "테이블을 선택해주세요!", icon='error')
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
