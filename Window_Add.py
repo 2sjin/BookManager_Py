@@ -110,7 +110,7 @@ class Window_Add_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
-        book_image = "../BookManager/sample_image/"+book_isbn+".gif"
+        book_image = "sample_image/"+book_isbn+".gif"
 
         message = messagebox.askquestion("신규 도서 추가", "{}({})을(를) 추가하시겠습니까?".format(book_title, book_isbn))
         if message == "yes":
