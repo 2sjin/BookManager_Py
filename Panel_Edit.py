@@ -158,7 +158,13 @@ class Panel_Edit_Book():
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
             # 원본 이미지 데이터 반환
-            self.image = Image.open(filename)
+            
+            # 이미지 저장 중 취소 버튼 선택시 오류 발생 수정
+            try:
+                self.image = Image.open(filename)
+            except:
+                return 0
+
             resize_image = self.image.resize((IMG_WIDTH, IMG_HEIGHT))
             image_tk = ImageTk.PhotoImage(resize_image,master=window)
             self.label_image.configure(image=image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
