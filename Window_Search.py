@@ -128,18 +128,19 @@ class Window_Search_User():
 class Window_Search_Book():
 
     # 생성자
-    def __init__(self):
+    def __init__(self, show_entry=""):
         self.window = Tk()
         self.window.title("도서 검색 결과")
         self.window.geometry(WINDOW_GEOMETRY)
 
         self.entry_search_book = Entry(self.window)
         self.entry_search_book.place(x=10, y=30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
+        self.entry_search_book.insert(0,show_entry)
 
         self.btn_search_book = Button(self.window, text="검색", command=self.event_book_search)
         self.btn_search_book.place(x=SEARCH_ENTRY_WIDTH+20, y=30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
         
-        self.label_search_book = Label(self.window, text="도서 검색 결과: 2 개")
+        self.label_search_book = Label(self.window, text="도서 검색 결과: 0 개")
         self.label_search_book.place(x=10, y=75)
 
         self.btn_select_book = Button(self.window, text="선택", command=self.event_book_select)
@@ -153,6 +154,8 @@ class Window_Search_Book():
             select_Table = self.book_table.focus()
             self.getTable = self.book_table.item(select_Table).get('values')
         self.book_table.bind('<ButtonRelease-1>',clicked_table)
+        if show_entry != "":
+            self.event_book_search()
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -180,13 +183,13 @@ class Window_Search_Book():
             self.book_table.delete(item)
         # 중복 방지 리스트, 한꺼번에 출력 - Ex) 도서 제목과 저자의 검색어 포함이 동일한 경우
         search_isbn_list = []
-        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
-        # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러올 때, ISBN이 실수형으로 처리되는 문제
+        df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949', dtype= {"BOOK_TITLE":object, "BOOK_AUTHOR":object, \
+            "BOOK_PUB":object, "BOOK_DESCRIPTION": object, "BOOK_LINK": object})
         index_key = self.entry_search_book.get().strip()
         book_title_list = list(df_book["BOOK_TITLE"])
         book_author_list = list(df_book["BOOK_AUTHOR"])
+        search_count = 0
         for match_word in book_title_list:
-            # 문자열 검사를 일일이 해야하므로 결측치 값이 없도록 기본값 설정해줘야함.
             if index_key in match_word:
                 condition = df_book.loc[df_book["BOOK_TITLE"] == match_word]
                 # condition 이 ISBN 은 다르지만 동인한 책이름을 여러개 찾는다면? 
@@ -211,12 +214,18 @@ class Window_Search_Book():
             book_publish = df_book.loc[ISBN, "BOOK_PUB"]
             book_add = (ISBN, book_title, book_author, book_publish)
             self.book_table.insert("","end",text="",value=book_add,iid=book_add[0])
+            search_count += 1
+
+        self.label_search_book.config(text=f"도서 검색 결과: {search_count} 개")
 
     # 멤버 메소드: [선택] 버튼 이벤트
     def event_book_select(self):
-        messagebox.showinfo("도서 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
-        self.window.quit()
-        self.window.destroy
+        try:    
+            messagebox.showinfo("도서 선택", f"{self.getTable[1]}({self.getTable[0]})를 선택하였습니다.")
+            self.window.quit()
+            self.window.destroy()
+        except:
+            messagebox.showinfo("도서 선택", "테이블을 선택해주세요!", icon='error')
 
     # 멤버 메소드: [취소] 버튼 이벤트
     def event_cancel(self):
