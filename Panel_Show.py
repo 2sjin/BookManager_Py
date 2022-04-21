@@ -357,21 +357,27 @@ class Panel_Show_Book():
 
         # 선택한 도서의 ISBN 가져오기
         try:
-            book_isbn = self.get_isbn()
-        except ValueError:
+            book_isbn = int(self.get_isbn())
+        except:
             return 0
 
         # 선택한 도서의 최근 대여 이력 가져오기
-        # rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
-        # user_phone = df_rent["USER_PHONE"].loc[rent_seq]
-        # user_name = df_user["USER_NAME"].loc[user_phone]
-        # rent_date = df_rent["RENT_DATE"].loc[rent_seq]
-        # rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        try:    
+            rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
+        except ValueError:
+            return 0
 
-        # # 대여 중인 도서이면 테이블에 레코드 추가
-        # if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
-        #     add_value = (user_phone, user_name, rent_date, rent_due_date)
-        #     self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+        user_name = df_user["USER_NAME"].loc[user_phone]
+        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+
+        # 대여 중인 도서이면 테이블에 레코드 추가
+        if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
+            add_value = (user_phone, user_name, rent_date, rent_due_date)
+            self.book_table.insert("", "end", text="", value=add_value, iid=add_value[0])
+
+
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
