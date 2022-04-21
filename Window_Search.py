@@ -20,7 +20,7 @@ DIR_CSV_RENT = "csv/rent.csv"
 # =========================================================
 class Window_Search_User():
     # 생성자
-    def __init__(self,show_entry=""):
+    def __init__(self, show_entry=""):
         self.window = Tk()
         self.window.title("회원 검색 결과")
         self.window.geometry(WINDOW_GEOMETRY)
@@ -45,8 +45,7 @@ class Window_Search_User():
             select_Table = self.user_table.focus()
             self.getTable = self.user_table.item(select_Table).get('values')
         self.user_table.bind('<ButtonRelease-1>',clicked_table)
-        if show_entry !="":
-            self.event_user_search()
+        self.event_user_search()
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -154,8 +153,7 @@ class Window_Search_Book():
             select_Table = self.book_table.focus()
             self.getTable = self.book_table.item(select_Table).get('values')
         self.book_table.bind('<ButtonRelease-1>',clicked_table)
-        if show_entry != "":
-            self.event_book_search()
+        self.event_book_search()
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기

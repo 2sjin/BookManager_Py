@@ -58,6 +58,9 @@ class Panel_Show_User():
         self.label_for_table = Label(text="[회원 정보]")
         self.label_for_table.place(x=x, y=y)
 
+        self.label_for_table = Label(text="전체 조회: 입력 없이 [검색] 클릭", font=("맑은 고딕", 8), fg="red")
+        self.label_for_table.place(x=x+238, y=y)
+
         self.entry_search_user = Entry(window)
         self.entry_search_user.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
@@ -308,6 +311,9 @@ class Panel_Show_Book():
         self.label1 = Label(text="[도서 정보]")
         self.label1.place(x=x, y=y)
 
+        self.label_for_table = Label(text="전체 조회: 입력 없이 [검색] 클릭", font=("맑은 고딕", 8), fg="red")
+        self.label_for_table.place(x=x+238, y=y)
+
         self.entry_search_book = Entry(window)
         self.entry_search_book.place(x=x, y=y+30, width=SEARCH_ENTRY_WIDTH, height=SEARCH_HEIGHT)
 
@@ -382,7 +388,7 @@ class Panel_Show_Book():
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
         try:
-            self.Search = Window_Search_Book()
+            self.Search = Window_Search_Book(self.entry_search_book.get())
             self.isbn = self.Search.getTable[0]
             df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
             df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
