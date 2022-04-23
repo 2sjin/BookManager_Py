@@ -125,29 +125,32 @@ class Panel_Show_User():
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
     def event_user_refresh(self):
-        self.user_editor.entry_name.delete("0","end")
-        self.user_editor.entry_phone.delete("0","end")
-        self.user_editor.entry_birthday.delete("0","end")
-        self.user_editor.entry_email.delete("0","end")
-        self.user_editor.entry_phone.insert(0,self.phone)
-        self.user_editor.entry_name.insert(0,self.name)
-        self.user_editor.entry_birthday.insert(0,self.birthday)
-        if self.gender=="남":
-            self.user_editor.gender_rb1.select()
-        else:
-            self.user_editor.gender_rb2.select()
-        self.user_editor.entry_email.insert(0,self.email)
-        if self.REG:
-            self.user_editor.registration_rb1.select()
-        else:
-            self.user_editor.registration_rb2.select()
-            
-        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.user_editor.label_image.image = self.photo_tk
+        try:
+            self.user_editor.entry_name.delete("0","end")
+            self.user_editor.entry_phone.delete("0","end")
+            self.user_editor.entry_birthday.delete("0","end")
+            self.user_editor.entry_email.delete("0","end")
+            self.user_editor.entry_phone.insert(0,self.phone)
+            self.user_editor.entry_name.insert(0,self.name)
+            self.user_editor.entry_birthday.insert(0,self.birthday)
+            if self.gender=="남":
+                self.user_editor.gender_rb1.select()
+            else:
+                self.user_editor.gender_rb2.select()
+            self.user_editor.entry_email.insert(0,self.email)
+            if self.REG:
+                self.user_editor.registration_rb1.select()
+            else:
+                self.user_editor.registration_rb2.select()
+                
+            self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+            self.user_editor.label_image.image = self.photo_tk
 
-        self.update_table()     # 대여 중인 도서 목록 새로고침
+            self.update_table()     # 대여 중인 도서 목록 새로고침
 
-        messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+            messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+        except:
+            pass
 
     # 멤버 메소드: 도서 반납 시 회원 정보 패널에 대여자(반납자)의 정보 출력
     def event_show_return_user(self, return_user_phone):
@@ -441,6 +444,7 @@ class Panel_Show_Book():
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
 
+# <<<<<<< HEAD
         try:
             if self.isbn in list(df_rent["BOOK_ISBN"]):
                 messagebox.showinfo("도서 정보 삭제 불가", "{}({})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!".format(self.title, self.isbn), icon='error')
@@ -454,6 +458,22 @@ class Panel_Show_Book():
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+# =======
+        # condition1 = df_rent["BOOK_ISBN"] == self.isbn
+        # condition2 = df_rent["RENT_RETURN_DATE"] == -1
+        # df_temp = df_rent[condition1 & condition2] 
+
+        # if -1 in list(df_temp["RENT_RETURN_DATE"]):
+        #     delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
+        #     messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
+        #     return 0
+        # df_book = df_book.drop(self.isbn)
+
+        # df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
+        # messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
+
+# >>>>>>> ff6c8ceb89de1771361370ea98850ceaa7452613
         # entry 내용 삭제
         self.book_editor.entry_isbn.delete("0","end")
         self.book_editor.entry_title.delete("0","end")
@@ -592,7 +612,7 @@ class Panel_Show_Book():
         df_book.loc[ISBN, "BOOK_LINK"] = book_link
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-    
+        
         # 저장 -> 원래대로
         self.isbn = ISBN
         self.title = book_title
