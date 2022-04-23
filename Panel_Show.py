@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import messagebox
 
 import pandas as pd
-
 from Panel_Edit import Panel_Edit_User
 from Panel_Edit import Panel_Edit_Book
 from Window_Search import Window_Search_User
@@ -11,7 +10,6 @@ from Window_Search import Window_Search_Book
 from PIL import Image
 from PIL import Image,ImageTk
 from os import remove
-
 SEARCH_ENTRY_WIDTH = 340
 SEARCH_BTN_WIDTH = 50
 SEARCH_HEIGHT = 24
@@ -88,44 +86,42 @@ class Panel_Show_User():
         self.entry_search_user.delete("0","end")
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        try:
-            self.phone = self.Search.getTable[0]
-            # 행 찾기
-            select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
-            # entry 내용 삭제
-            self.user_editor.entry_name.delete("0","end")
-            self.user_editor.entry_phone.delete("0","end")
-            self.user_editor.entry_birthday.delete("0","end")
-            self.user_editor.entry_email.delete("0","end")
-            # 찾은 행 값 삽입하기
-            self.user_editor.entry_phone.insert(0,self.phone)
-            self.name = select_user["USER_NAME"].loc[self.phone]
-            self.user_editor.entry_name.insert(0,self.name)
-            self.birthday = str(select_user["USER_BIRTH"].loc[self.phone])
-            self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
-            self.user_editor.entry_birthday.insert(0,self.birthday)
-            self.gender = select_user["USER_SEX"].loc[self.phone]
-            if self.gender=="남":
-                self.user_editor.gender_rb1.select()
-            else:
-                self.user_editor.gender_rb2.select()
-            self.email = select_user["USER_MAIL"].loc[self.phone]
-            self.user_editor.entry_email.insert(0,self.email)
-            self.REG = select_user["USER_REG"].loc[self.phone]
-            if self.REG:
-                self.user_editor.registration_rb1.select()
-            else:
-                self.user_editor.registration_rb2.select()
-            self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
-            self.select_address = select_user["USER_IMAGE"].loc[self.phone]
-            self.photo = Image.open(self.select_address)
-            resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
-            self.photo_tk = ImageTk.PhotoImage(resize_photo)
-            self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-            self.user_editor.label_image.image = self.photo_tk
-            self.update_table()     # 대여 중인 도서 목록 새로고침
-        except:
-            pass
+        self.phone = self.Search.getTable[0]
+        # 행 찾기
+        select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
+        # entry 내용 삭제
+        self.user_editor.entry_name.delete("0","end")
+        self.user_editor.entry_phone.delete("0","end")
+        self.user_editor.entry_birthday.delete("0","end")
+        self.user_editor.entry_email.delete("0","end")
+        # 찾은 행 값 삽입하기
+        self.user_editor.entry_phone.insert(0,self.phone)
+        self.name = select_user["USER_NAME"].loc[self.phone]
+        self.user_editor.entry_name.insert(0,self.name)
+        self.birthday = str(select_user["USER_BIRTH"].loc[self.phone])
+        self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
+        self.user_editor.entry_birthday.insert(0,self.birthday)
+        self.gender = select_user["USER_SEX"].loc[self.phone]
+        if self.gender=="남":
+            self.user_editor.gender_rb1.select()
+        else:
+            self.user_editor.gender_rb2.select()
+        self.email = select_user["USER_MAIL"].loc[self.phone]
+        self.user_editor.entry_email.insert(0,self.email)
+        self.REG = select_user["USER_REG"].loc[self.phone]
+        if self.REG:
+            self.user_editor.registration_rb1.select()
+        else:
+            self.user_editor.registration_rb2.select()
+        self.rent_count = select_user["USER_RENT_CNT"].loc[self.phone]
+        self.select_address = select_user["USER_IMAGE"].loc[self.phone]
+        self.photo = Image.open(self.select_address)
+        resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
+        self.photo_tk = ImageTk.PhotoImage(resize_photo)
+        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+        self.user_editor.label_image.image = self.photo_tk
+        self.update_table()     # 대여 중인 도서 목록 새로고침
+        
         
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
@@ -210,7 +206,6 @@ class Panel_Show_User():
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         df_user["USER_REG"].loc[self.phone] = self.user_editor.get_REG()
-        address = "sample_image/"+self.phone+".png"
         user_phone.remove(self.phone)
         if self.rent_count > 0 and (self.user_editor.get_REG() == False):    # 라디오버튼 '탈퇴'에 체크할 경우에만 조건 확인
             messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
@@ -227,28 +222,27 @@ class Panel_Show_User():
         if len(self.user_editor.get_birthday2()) < 10 and self.user_editor.get_birthday2().count("-") < 2:
             messagebox.showinfo("생일 형식 오류", "□□□□-□□-□□ 형식을 지켜주세요!!")
             return 0
+        address = "sample_image/"+self.user_editor.get_phone()+".png"
+        # 이미지 파일 저장("전화번호.png")
+        try:
+            self.user_editor.photo.save(address,"png")
+        except:
+            pass
         df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
-
-        # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [원래대로] 버튼을 눌렀을 때 수정한 정보 반영하기 위함)
-        user_phone = df_user["USER_PHONE"].tolist()
-        self.phone = df_user["USER_PHONE"].loc[self.phone]
+     # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [원래대로] 버튼을 눌렀을 때 수정한 정보 반영하기 위함)
+        df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        self.phone = self.user_editor.get_phone()
         self.name = df_user["USER_NAME"].loc[self.phone]
         self.birthday = df_user["USER_BIRTH"].loc[self.phone]
+        self.birthday = str(self.birthday)
         self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
         self.gender = df_user["USER_SEX"].loc[self.phone]
         self.mail = df_user["USER_MAIL"].loc[self.phone]
         self.REG = df_user["USER_REG"].loc[self.phone]
         self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
         address = "sample_image/"+self.phone+".png"
-        user_phone.remove(self.phone)
-
-        # 이미지 파일 저장("전화번호.png")
-        try:
-            self.user_editor.photo.save(address,"png")
-        except:
-            pass
-
         messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
 
     # 멤버 메소드: '대여 중인 도서목록' 테이블 불러오기
@@ -457,36 +451,20 @@ class Panel_Show_Book():
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
 
-# <<<<<<< HEAD
-        try:
-            if self.isbn in list(df_rent["BOOK_ISBN"]):
-                messagebox.showinfo("도서 정보 삭제 불가", "{}({})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!".format(self.title, self.isbn), icon='error')
-                return 0
-        except:
+        condition1 = df_rent["BOOK_ISBN"] == self.isbn
+        condition2 = df_rent["RENT_RETURN_DATE"] == -1
+        df_temp = df_rent[condition1 & condition2] 
+
+        if -1 in list(df_temp["RENT_RETURN_DATE"]):
+            delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
+            messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
             return 0
         df_book = df_book.drop(self.isbn)
 
-        self.isbn = ""
+        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
-        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-# =======
-        # condition1 = df_rent["BOOK_ISBN"] == self.isbn
-        # condition2 = df_rent["RENT_RETURN_DATE"] == -1
-        # df_temp = df_rent[condition1 & condition2] 
-
-        # if -1 in list(df_temp["RENT_RETURN_DATE"]):
-        #     delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
-        #     messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
-        #     return 0
-        # df_book = df_book.drop(self.isbn)
-
-        # df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-
-        # messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
-
-# >>>>>>> ff6c8ceb89de1771361370ea98850ceaa7452613
         # entry 내용 삭제
         self.book_editor.entry_isbn.delete("0","end")
         self.book_editor.entry_title.delete("0","end")
@@ -508,14 +486,10 @@ class Panel_Show_Book():
         self.book_editor.entry_link.delete("0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
 
-
         # 도서 정보 출력
         # 아무 검색 하지않고 원래대로 버튼 클릭시 오류 수정
         try:
             self.book_editor.entry_isbn.insert("0", self.isbn)
-            # 도서 정보 삭제 후 -> 원래대로 오류 수정
-            if self.isbn == "":
-                return 0
             self.book_editor.entry_title.insert("0",self.title)
             self.book_editor.entry_author.insert("0",self.author)
             self.book_editor.entry_publisher.insert("0",self.publisher)
@@ -573,7 +547,7 @@ class Panel_Show_Book():
         if self.isbn == int(ISBN):
             # (덮어쓰기)
             try:
-                self.book_editor.image.save(book_image_address, "png")
+                self.book_editor.image.save(book_image_address, "gif")
                 image = Image.open(book_image_address)    
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(resize_image)
@@ -583,7 +557,7 @@ class Panel_Show_Book():
             except:
                 # 파일 ISBN, 사진 그대로 저장
                 image = Image.open(self.image_address)
-                image.save(book_image_address, "png") # (덮어쓰기)
+                image.save(book_image_address, "gif") # (덮어쓰기)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)
                 self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
@@ -591,7 +565,7 @@ class Panel_Show_Book():
         else:
             try:
                 # ISBN, 파일 모두 변경
-                self.book_editor.image.save(book_image_address, "png")
+                self.book_editor.image.save(book_image_address, "gif")
                 image = Image.open(book_image_address)
                 # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임.
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
@@ -602,7 +576,7 @@ class Panel_Show_Book():
                 remove(self.image_address)
             except:
                 image = Image.open(self.image_address)     
-                image.save(book_image_address, "png")
+                image.save(book_image_address, "gif")
                 image = Image.open(book_image_address)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)
