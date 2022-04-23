@@ -449,6 +449,9 @@ class Panel_Show_Book():
             messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
             return 0
         df_book = df_book.drop(self.isbn)
+
+        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
         # entry 내용 삭제
@@ -585,7 +588,7 @@ class Panel_Show_Book():
         df_book.loc[ISBN, "BOOK_LINK"] = book_link
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-    
+        
         # 저장 -> 원래대로
         self.isbn = ISBN
         self.title = book_title
