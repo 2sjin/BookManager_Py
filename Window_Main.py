@@ -42,6 +42,7 @@ class Window_Main():
         self.window = Tk()
         self.window.title("도서 대여 프로그램")
         self.window.geometry('900x575')
+        self.window.resizable(width=FALSE, height=FALSE)
 
         self.userinfo = Panel_Show_User(self.window, x=10, y=20)    # 회원 정보 패널 붙이기
         self.bookinfo = Panel_Show_Book(self.window, x=BOOK_INFO_X, y=BOOK_INFO_Y)   # 도서 정보 패널 붙이기

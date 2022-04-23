@@ -9,6 +9,7 @@ from PIL import Image,ImageTk
 DIR_CSV_USER = "csv/user.csv"
 DIR_CSV_BOOK = "csv/book.csv"
 DIR_CSV_RENT = "csv/rent.csv"
+
 # ========================================================================================================
 # 클래스: 신규 회원 추가 윈도우
 # ========================================================================================================
@@ -20,6 +21,7 @@ class Window_Add_User():
         self.window = Tk()
         self.window.geometry('420x220')
         self.window.title("신규 회원 추가")
+        self.window.resizable(width=FALSE, height=FALSE)
         def func_exit(event):
             self.window.quit()
             self.window.destroy()
