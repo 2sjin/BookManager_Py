@@ -129,29 +129,32 @@ class Panel_Show_User():
 
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
     def event_user_refresh(self):
-        self.user_editor.entry_name.delete("0","end")
-        self.user_editor.entry_phone.delete("0","end")
-        self.user_editor.entry_birthday.delete("0","end")
-        self.user_editor.entry_email.delete("0","end")
-        self.user_editor.entry_phone.insert(0,self.phone)
-        self.user_editor.entry_name.insert(0,self.name)
-        self.user_editor.entry_birthday.insert(0,self.birthday)
-        if self.gender=="남":
-            self.user_editor.gender_rb1.select()
-        else:
-            self.user_editor.gender_rb2.select()
-        self.user_editor.entry_email.insert(0,self.email)
-        if self.REG:
-            self.user_editor.registration_rb1.select()
-        else:
-            self.user_editor.registration_rb2.select()
-            
-        self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-        self.user_editor.label_image.image = self.photo_tk
+        try:
+            self.user_editor.entry_name.delete("0","end")
+            self.user_editor.entry_phone.delete("0","end")
+            self.user_editor.entry_birthday.delete("0","end")
+            self.user_editor.entry_email.delete("0","end")
+            self.user_editor.entry_phone.insert(0,self.phone)
+            self.user_editor.entry_name.insert(0,self.name)
+            self.user_editor.entry_birthday.insert(0,self.birthday)
+            if self.gender=="남":
+                self.user_editor.gender_rb1.select()
+            else:
+                self.user_editor.gender_rb2.select()
+            self.user_editor.entry_email.insert(0,self.email)
+            if self.REG:
+                self.user_editor.registration_rb1.select()
+            else:
+                self.user_editor.registration_rb2.select()
+                
+            self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+            self.user_editor.label_image.image = self.photo_tk
 
-        self.update_table()     # 대여 중인 도서 목록 새로고침
+            self.update_table()     # 대여 중인 도서 목록 새로고침
 
-        messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+            messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+        except:
+            pass
 
     # 멤버 메소드: 도서 반납 시 회원 정보 패널에 대여자(반납자)의 정보 출력
     def event_show_return_user(self, return_user_phone):
