@@ -21,7 +21,7 @@ BTN_WIDTH = 75
 IMG_WIDTH = 120
 IMG_HEIGHT = 160
 
-INFO_BTN_Y = 280
+INFO_BTN_Y = 310
 LABEL_FOR_TABLE_Y = 340
 
 DIR_CSV_USER = "csv/user.csv"
@@ -80,6 +80,11 @@ class Panel_Show_User():
     # 멤버 메소드: [검색] 버튼 이벤트: 회원 검색 결과 윈도우 띄우기
     def event_user_search(self):
         self.Search = Window_Search_User(self.entry_search_user.get())
+
+        # 취소 버튼 눌렀을 때 이벤트
+        if self.Search.cancel == True:
+            return None
+
         self.entry_search_user.delete("0","end")
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
@@ -205,7 +210,7 @@ class Panel_Show_User():
         df_user["USER_SEX"].loc[self.phone] = self.user_editor.get_gender()
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         df_user["USER_REG"].loc[self.phone] = self.user_editor.get_REG()
-        address = "sample_image/"+self.phone+".gif"
+        address = "sample_image/"+self.phone+".png"
         user_phone.remove(self.phone)
         if self.rent_count > 0 and (self.user_editor.get_REG() == False):    # 라디오버튼 '탈퇴'에 체크할 경우에만 조건 확인
             messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
@@ -235,10 +240,10 @@ class Panel_Show_User():
         self.mail = df_user["USER_MAIL"].loc[self.phone]
         self.REG = df_user["USER_REG"].loc[self.phone]
         self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
-        address = "sample_image/"+self.phone+".gif"
+        address = "sample_image/"+self.phone+".png"
         user_phone.remove(self.phone)
 
-        # 이미지 파일 저장("전화번호.gif")
+        # 이미지 파일 저장("전화번호.png")
         try:
             self.user_editor.photo.save(address,"gif")
         except:
@@ -393,6 +398,11 @@ class Panel_Show_Book():
     def event_book_search(self):
         try:
             self.Search = Window_Search_Book(self.entry_search_book.get())
+
+            # 취소 버튼 눌렀을 때 이벤트
+            if self.Search.cancel == True:
+                return None
+
             self.isbn = self.Search.getTable[0]
             df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
             df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
@@ -404,16 +414,19 @@ class Panel_Show_Book():
             self.book_editor.entry_publisher.delete("0","end")
             self.book_editor.entry_price.delete("0","end")
             self.book_editor.entry_link.delete("0","end")
-            self.book_editor.entry_book_explain.delete("0","end")
+            self.book_editor.entry_book_explain.delete("1.0", "end")
 
             # 도서 정보 검색
             self.title = df_book.loc[self.isbn, "BOOK_TITLE"]
+
+
             self.author = df_book.loc[self.isbn, "BOOK_AUTHOR"]
             self.publisher = df_book.loc[self.isbn, "BOOK_PUB"]
             self.price = df_book.loc[self.isbn, "BOOK_PRICE"]
             self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
             self.image_address = df_book.loc[self.isbn, "BOOK_IMAGE"]
             self.link = df_book.loc[self.isbn, "BOOK_LINK"]
+
 
             # 도서 이미지 찾기, 조절
             image = Image.open(self.image_address)
@@ -427,11 +440,11 @@ class Panel_Show_Book():
             self.book_editor.entry_publisher.insert("0",self.publisher)
             self.book_editor.entry_price.insert("0",self.price)
             self.book_editor.entry_link.insert("0",self.link)
-            self.book_editor.entry_book_explain.insert("0",self.book_explain)
+            self.book_editor.entry_book_explain.insert("1.0",self.book_explain)
             self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.book_editor.label_image.image = self.image_tk
             self.update_table()
-        except:
+        except EOFError:
             pass
 
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
@@ -481,7 +494,7 @@ class Panel_Show_Book():
         self.book_editor.entry_publisher.delete("0","end")
         self.book_editor.entry_price.delete("0","end")
         self.book_editor.entry_link.delete("0","end")
-        self.book_editor.entry_book_explain.delete("0","end")
+        self.book_editor.entry_book_explain.delete("1.0","end")
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
@@ -493,7 +506,7 @@ class Panel_Show_Book():
         self.book_editor.entry_publisher.delete("0","end")
         self.book_editor.entry_price.delete("0","end")
         self.book_editor.entry_link.delete("0","end")
-        self.book_editor.entry_book_explain.delete("0","end")
+        self.book_editor.entry_book_explain.delete("1.0","end")
 
 
         # 도서 정보 출력
@@ -508,7 +521,7 @@ class Panel_Show_Book():
             self.book_editor.entry_publisher.insert("0",self.publisher)
             self.book_editor.entry_price.insert("0",self.price)
             self.book_editor.entry_link.insert("0",self.link)
-            self.book_editor.entry_book_explain.insert("0",self.book_explain)
+            self.book_editor.entry_book_explain.insert("1.0",self.book_explain)
             self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.book_editor.label_image.image = self.image_tk
             self.update_table()
@@ -530,7 +543,7 @@ class Panel_Show_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
-        book_image_address = "sample_image/"+ISBN+".gif"
+        book_image_address = "sample_image/"+ISBN+".png"
 
         message = messagebox.askquestion("도서 수정", "{}({})을(를) 수정하시겠습니까?".format(book_title, ISBN))
         if message == "yes":

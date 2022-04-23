@@ -5,8 +5,7 @@ BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUB,BOOK_PRICE,BOOK_DESCRIPTION,BOOK_IMAGE
 9791162242032,팀 개발을 위한 Git GitHub 시작하기,"정호영, 진유림",한빛미디어,18000,"소스코드 버전 관리를 위한 깃 깃허브, 오픈소스 참여",sample_image/9791162242032.gif,https://book.naver.com/bookdb/book_detail.naver?bid=15986509
 9791156005049,소프트웨어 공학의 소개,한혁수,홍릉(홍릉과학출판사),25000,,sample_image/9791156005049.gif,https://book.naver.com/bookdb/book_detail.naver?bid=11761284
 9788970187778,최신 컴퓨터 개론과 정보기술의 이해,왕종수,기한재,23000,,sample_image/9788970187778.gif,https://book.naver.com/bookdb/book_detail.naver?bid=11771028
-9791156645313,C 언어 일취월장,신윤환,한빛아카데미,28000,,sample_image/.gif,https://book.naver.com/bookdb/book_detail.naver?bid=18030668
-9791165210397,모두의 딥러닝,조태호,길벗,24000,,sample_image/.gif,https://book.naver.com/bookdb/book_detail.naver?bid=16215446
-9788970509433,명품 C++ Programming,황기태,생능출판,30000,눈과 직관만으로도 누구나 쉽게 이해할 수 있는 명품 C++ 강좌,sample_image/.gif,https://book.naver.com/bookdb/book_detail.naver?bid=13395206
-9788970508931,두근두근 파이썬,천인국,생능출판,24000,쉽고! 재밌고! 흥미로운 코딩 맛!,sample_image/.gif,https://book.naver.com/bookdb/book_detail.naver?bid=11573148
-9788970509419,두근두근 자료구조,"최영규, 천인국, 공용해",생능출판,28000,,sample_image/.gif,https://book.naver.com/bookdb/book_detail.naver?bid=13285942
+9791156645313,C 언어 일취월장,신윤환,한빛아카데미,28000,,sample_image/9791156645313.gif,https://book.naver.com/bookdb/book_detail.naver?bid=18030668
+9791165210397,모두의 딥러닝,조태호,길벗,24000,,sample_image/9791165210397.gif,https://book.naver.com/bookdb/book_detail.naver?bid=16215446
+9788970509433,명품 C++ Programming,황기태,생능출판,30000,눈과 직관만으로도 누구나 쉽게 이해할 수 있는 명품 C++ 강좌,sample_image/9788970509433.gif,https://book.naver.com/bookdb/book_detail.naver?bid=13395206
+9788970509419,두근두근 자료구조,"최영규, 천인국, 공용해",생능출판,28000,,sample_image/9788970509419.gif,https://book.naver.com/bookdb/book_detail.naver?bid=13285942

@@ -155,8 +155,9 @@ class Panel_Edit_Book():
         self.entry_link = Entry(window)
         self.entry_link.place(x=x+60, y=y+125, width=ENTRY_WIDTH)
 
-        self.entry_book_explain = Entry(window)
-        self.entry_book_explain.place(x=x+60, y=y+150, width=ENTRY_WIDTH)
+        # 도서 설명 여러 줄 입력 가능
+        self.entry_book_explain = Text(window)
+        self.entry_book_explain.place(x=x+60, y=y+150, width=ENTRY_WIDTH, height=60)
 
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
@@ -192,6 +193,6 @@ class Panel_Edit_Book():
     def get_link(self):
         return self.entry_link.get().rstrip()
     def get_book_explain(self):
-        return self.entry_book_explain.get().rstrip()
+        return self.entry_book_explain.get("1.0", "end").rstrip()
 
 # =======================================================================================
