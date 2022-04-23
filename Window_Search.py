@@ -46,6 +46,9 @@ class Window_Search_User():
             self.getTable = self.user_table.item(select_Table).get('values')
         self.user_table.bind('<ButtonRelease-1>',clicked_table)
         self.event_user_search()
+
+        self.cancel = False
+
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -116,7 +119,7 @@ class Window_Search_User():
     def event_cancel(self):
         self.window.quit()
         self.window.destroy()
-    
+        self.cancel = True
 
 # =========================================================
 
@@ -154,6 +157,9 @@ class Window_Search_Book():
             self.getTable = self.book_table.item(select_Table).get('values')
         self.book_table.bind('<ButtonRelease-1>',clicked_table)
         self.event_book_search()
+
+        self.cancel = False
+
         self.window.mainloop()
 
     # 멤버 메소드: 테이블 불러오기
@@ -229,5 +235,7 @@ class Window_Search_Book():
     def event_cancel(self):
         self.window.quit()
         self.window.destroy()
+        self.cancel = True
+        
 
 # =========================================================

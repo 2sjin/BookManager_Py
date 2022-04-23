@@ -43,7 +43,7 @@ class Window_Add_User():
         user_birthday = self.user_editor.get_birthday()
         user_gender = self.user_editor.get_gender()
         user_email = self.user_editor.get_email()
-        address = "sample_image/"+user_phone+".gif"
+        address = "sample_image/"+user_phone+".png"
         new_user = pd.DataFrame.from_dict([{ "USER_PHONE": user_phone, "USER_NAME": user_name,"USER_BIRTH": user_birthday,
         "USER_SEX": user_gender,"USER_MAIL": user_email,"USER_IMAGE": address, "USER_REG": True,"USER_RENT_CNT": 0 }])
         if len(self.user_editor.get_phone()) < 13 and self.user_editor.get_phone().count("-") < 2:
@@ -63,7 +63,7 @@ class Window_Add_User():
             try:
                 self.user_editor.photo.save(address,"gif")
             except:
-                image = Image.open("sample_image/Default_Image.gif")
+                image = Image.open("sample_image/Default_Image.png")
                 image.save(address,"gif")
             df_user = pd.concat([df_user,new_user])
             df_user = df_user.set_index(df_user['USER_PHONE'])
@@ -82,17 +82,17 @@ class Window_Add_Book():
     # 생성자
     def __init__(self):
         self.window = Tk()
-        self.window.geometry('420x230')
+        self.window.geometry('420x290')
         self.window.title("신규 도서 추가")
         def func_exit(event):
             self.window.quit()
             self.window.destroy()
         self.book_editor = Panel_Edit_Book(self.window, x=140, y=10)   # 도서 Edit 패널을 윈도우에 포함시킴
         self.button_check = Button(self.window,text="확인",width=7, command=self.add_book)  # [확인] 버튼 이벤트 추가
-        self.button_check.place(x=240,y=195)
+        self.button_check.place(x=240,y=240)
         self.button_cancel = Button(self.window,text="취소",width=7)
         self.button_cancel.bind("<ButtonRelease-1>",func_exit)
-        self.button_cancel.place(x=320,y=195)
+        self.button_cancel.place(x=320,y=240)
         
         self.window.mainloop()
 
@@ -110,7 +110,7 @@ class Window_Add_Book():
         book_price = self.book_editor.get_price()
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
-        book_image = "sample_image/"+book_isbn+".gif"
+        book_image = "sample_image/"+book_isbn+".png"
 
         message = messagebox.askquestion("신규 도서 추가", "{}({})을(를) 추가하시겠습니까?".format(book_title, book_isbn))
         if message == "yes":
