@@ -11,6 +11,7 @@ from Window_Search import Window_Search_Book
 from PIL import Image
 from PIL import Image,ImageTk
 from os import remove
+
 SEARCH_ENTRY_WIDTH = 340
 SEARCH_BTN_WIDTH = 50
 SEARCH_HEIGHT = 24
@@ -456,20 +457,36 @@ class Panel_Show_Book():
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
 
-        condition1 = df_rent["BOOK_ISBN"] == self.isbn
-        condition2 = df_rent["RENT_RETURN_DATE"] == -1
-        df_temp = df_rent[condition1 & condition2] 
-
-        if -1 in list(df_temp["RENT_RETURN_DATE"]):
-            delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
-            messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
+# <<<<<<< HEAD
+        try:
+            if self.isbn in list(df_rent["BOOK_ISBN"]):
+                messagebox.showinfo("도서 정보 삭제 불가", "{}({})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!".format(self.title, self.isbn), icon='error')
+                return 0
+        except:
             return 0
         df_book = df_book.drop(self.isbn)
 
-        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+        self.isbn = ""
 
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
+        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+# =======
+        # condition1 = df_rent["BOOK_ISBN"] == self.isbn
+        # condition2 = df_rent["RENT_RETURN_DATE"] == -1
+        # df_temp = df_rent[condition1 & condition2] 
+
+        # if -1 in list(df_temp["RENT_RETURN_DATE"]):
+        #     delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
+        #     messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
+        #     return 0
+        # df_book = df_book.drop(self.isbn)
+
+        # df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
+        # messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
+
+# >>>>>>> ff6c8ceb89de1771361370ea98850ceaa7452613
         # entry 내용 삭제
         self.book_editor.entry_isbn.delete("0","end")
         self.book_editor.entry_title.delete("0","end")
@@ -491,10 +508,14 @@ class Panel_Show_Book():
         self.book_editor.entry_link.delete("0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
 
+
         # 도서 정보 출력
         # 아무 검색 하지않고 원래대로 버튼 클릭시 오류 수정
         try:
             self.book_editor.entry_isbn.insert("0", self.isbn)
+            # 도서 정보 삭제 후 -> 원래대로 오류 수정
+            if self.isbn == "":
+                return 0
             self.book_editor.entry_title.insert("0",self.title)
             self.book_editor.entry_author.insert("0",self.author)
             self.book_editor.entry_publisher.insert("0",self.publisher)
