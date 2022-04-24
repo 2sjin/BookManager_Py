@@ -132,7 +132,7 @@ class Panel_Edit_Book():
         self.label_link.place(x=x, y=y+125)
 
         self.label_book_explain = Label(window, text="도서설명 : ")
-        self.label_book_explain.place(x=x, y=y+150)
+        self.label_book_explain.place(x=x, y=y+160)
 
         self.label_image = Label(window)
         self.label_image.place(x=x-135,y=y-5, width=IMG_WIDTH, height=IMG_HEIGHT) 
@@ -152,12 +152,12 @@ class Panel_Edit_Book():
         self.entry_price = Entry(window)
         self.entry_price.place(x=x+60, y=y+100, width=ENTRY_WIDTH)
 
-        self.entry_link = Entry(window)
-        self.entry_link.place(x=x+60, y=y+125, width=ENTRY_WIDTH)
+        self.entry_link = Text(window)
+        self.entry_link.place(x=x+60, y=y+125, width=ENTRY_WIDTH, height=30)
 
         # 도서 설명 여러 줄 입력 가능
         self.entry_book_explain = Text(window)
-        self.entry_book_explain.place(x=x+60, y=y+150, width=ENTRY_WIDTH, height=60)
+        self.entry_book_explain.place(x=x+60, y=y+165, width=ENTRY_WIDTH, height=60)
 
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
@@ -190,7 +190,7 @@ class Panel_Edit_Book():
         return self.entry_price.get().rstrip()
         # 가격 형식 검사 위와 동일
     def get_link(self):
-        return self.entry_link.get().rstrip()
+        return self.entry_link.get("1.0", "end").rstrip()
     def get_book_explain(self):
         return self.entry_book_explain.get("1.0", "end").rstrip()
 
