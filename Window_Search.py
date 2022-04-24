@@ -185,34 +185,17 @@ class Window_Search_Book():
         # 테이블 초기화
         for item in self.book_table.get_children():
             self.book_table.delete(item)
-        # 중복 방지 리스트, 한꺼번에 출력 - Ex) 도서 제목과 저자의 검색어 포함이 동일한 경우
-        search_isbn_list = []
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949', dtype= {"BOOK_TITLE":object, "BOOK_AUTHOR":object, \
             "BOOK_PUB":object, "BOOK_DESCRIPTION": object, "BOOK_LINK": object})
         index_key = self.entry_search_book.get().strip()
-        book_title_list = list(df_book["BOOK_TITLE"])
-        book_author_list = list(df_book["BOOK_AUTHOR"])
+
+        search_title_list = df_book["BOOK_TITLE"].str.contains(index_key)
+        search_author_list = df_book["BOOK_AUTHOR"].str.contains(index_key)
+        search_isbn = df_book[search_title_list | search_author_list]
         search_count = 0
-        for match_word in book_title_list:
-            if index_key in match_word:
-                condition = df_book.loc[df_book["BOOK_TITLE"] == match_word]
-                # condition 이 ISBN 은 다르지만 동인한 책이름을 여러개 찾는다면? 
-                condition = list(condition["BOOK_ISBN"])
-                for i in condition:
-                    if i in search_isbn_list:
-                        continue
-                    search_isbn_list.append(i)
-        for match_word in book_author_list:
-            if index_key in match_word:
-                condition = df_book.loc[df_book["BOOK_AUTHOR"] == match_word]
-                # condition 이 ISBN 은 다르지만 동인한 책 저자를 여러개 찾는다면? 
-                condition = list(condition["BOOK_ISBN"])
-                for i in condition:
-                    if i in search_isbn_list:
-                        continue
-                    search_isbn_list.append(i)
+
         df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
-        for ISBN in search_isbn_list:
+        for ISBN in list(search_isbn["BOOK_ISBN"]):
             book_title = df_book.loc[ISBN, "BOOK_TITLE"]
             book_author = df_book.loc[ISBN, "BOOK_AUTHOR"]
             book_publish = df_book.loc[ISBN, "BOOK_PUB"]
