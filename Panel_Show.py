@@ -565,7 +565,7 @@ class Panel_Show_Book():
         if self.isbn == int(ISBN):
             # (덮어쓰기)
             try:
-                self.book_editor.image.save(book_image_address, "gif")
+                self.book_editor.image.save(book_image_address, "png")
                 image = Image.open(book_image_address)    
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(resize_image)
@@ -575,7 +575,7 @@ class Panel_Show_Book():
             except:
                 # 파일 ISBN, 사진 그대로 저장
                 image = Image.open(self.image_address)
-                image.save(book_image_address, "gif") # (덮어쓰기)
+                image.save(book_image_address, "png") # (덮어쓰기)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)
                 self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
@@ -583,7 +583,7 @@ class Panel_Show_Book():
         else:
             try:
                 # ISBN, 파일 모두 변경
-                self.book_editor.image.save(book_image_address, "gif")
+                self.book_editor.image.save(book_image_address, "png")
                 image = Image.open(book_image_address)
                 # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임.
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
@@ -594,7 +594,7 @@ class Panel_Show_Book():
                 remove(self.image_address)
             except:
                 image = Image.open(self.image_address)     
-                image.save(book_image_address, "gif")
+                image.save(book_image_address, "png")
                 image = Image.open(book_image_address)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)

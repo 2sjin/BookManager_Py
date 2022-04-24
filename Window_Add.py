@@ -78,7 +78,7 @@ class Window_Add_User():
 # ========================================================================================================
 
 
-# ================================================================================== ======================
+# ========================================================================================================
 # 클래스: 신규 도서 추가 윈도우
 # ========================================================================================================
 class Window_Add_Book():
@@ -146,7 +146,7 @@ class Window_Add_Book():
         new_book = pd.DataFrame.from_dict([{ "BOOK_ISBN": book_isbn, "BOOK_TITLE": book_title, "BOOK_AUTHOR": book_author, 
         "BOOK_PUB": book_publisher, "BOOK_PRICE": book_price,"BOOK_DESCRIPTION": book_explain, "BOOK_IMAGE": book_image, "BOOK_LINK": book_link }])
         df_book = pd.concat([df_book,new_book])
-        
+
         # 도서를 Window_Add에서 추가하지 않고 csv 파일에서 직접 추가하면 불러온 다음, 
         # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제 발생
 
