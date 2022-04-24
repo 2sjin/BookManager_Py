@@ -455,16 +455,21 @@ class Panel_Show_Book():
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
 
-        condition1 = df_rent["BOOK_ISBN"] == self.isbn
-        print(condition1)
-        condition2 = df_rent["RENT_RETURN_DATE"] == -1
-        print(condition2)
-        df_temp = df_rent[condition1 & condition2] 
-        print(df_temp)
+        # self.isbn 값 없을 시 return 0
+        # 삭제를 한 경우 또 삭제를 할 때,
+        try:
+            if self.isbn == "":
+                messagebox.showinfo("도서 정보 삭제 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+                return 0
+            condition1 = df_rent["BOOK_ISBN"] == self.isbn
+            condition2 = df_rent["RENT_RETURN_DATE"] == -1
+            df_temp = df_rent[condition1 & condition2]
+        except:
+            messagebox.showinfo("도서 정보 삭제 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+            return 0
 
         if -1 in list(df_temp["RENT_RETURN_DATE"]):
-            delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
-            messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!", icon='error')
+            messagebox.showinfo("도서 정보 삭제 불가", f"- 이미 대출 중인 도서 입니다.\n- {self.title}({self.isbn})를 먼저 반납해주세요!", icon='error')
             return 0
         df_book = df_book.drop(self.isbn)
         self.isbn = ""
