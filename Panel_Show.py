@@ -245,7 +245,7 @@ class Panel_Show_User():
 
         # 이미지 파일 저장("전화번호.png")
         try:
-            self.user_editor.photo.save(address,"gif")
+            self.user_editor.photo.save(address,"png")
         except:
             pass
 
