@@ -1,7 +1,7 @@
 USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
 010-1234-5678,심다운,20070310,여,down@gmail.com,sample_image/010-1234-5678.png,True,1
 010-1111-3333,신한길,19870511,남,1way@gmail.com,sample_image/010-1111-3333.png,True,0
-010-3333-4444,배힘찬,20070228,여,powerful@gmail.com,sample_image/010-3333-4444.png,True,0
+010-7815-1404,배힘찬,19990511,여,powerful@gmail.com,sample_image/010-7815-1404.png,True,0
 010-5555-7777,장하늘,19971110,남,longsky@gmail.com,sample_image/010-5555-7777.png,True,0
 010-7777-8888,풍하나,20030115,여,wind1@gmail.com,sample_image/010-7777-8888.png,True,0
 010-9999-1111,양미르,20081228,남,dragon@gmail.com,sample_image/010-9999-1111.png,True,0
