@@ -397,6 +397,7 @@ class Panel_Show_Book():
             if self.Search.cancel == True:
                 return None
 
+            # self.isbn = int 타입
             self.isbn = self.Search.getTable[0]
             df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
             df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
@@ -412,15 +413,12 @@ class Panel_Show_Book():
 
             # 도서 정보 검색
             self.title = df_book.loc[self.isbn, "BOOK_TITLE"]
-
-
             self.author = df_book.loc[self.isbn, "BOOK_AUTHOR"]
             self.publisher = df_book.loc[self.isbn, "BOOK_PUB"]
             self.price = df_book.loc[self.isbn, "BOOK_PRICE"]
-            self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
             self.image_address = df_book.loc[self.isbn, "BOOK_IMAGE"]
             self.link = df_book.loc[self.isbn, "BOOK_LINK"]
-
+            self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
 
             # 도서 이미지 찾기, 조절
             image = Image.open(self.image_address)
@@ -438,7 +436,7 @@ class Panel_Show_Book():
             self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.book_editor.label_image.image = self.image_tk
             self.update_table()
-        except EOFError:
+        except:
             pass
 
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
@@ -451,16 +449,26 @@ class Panel_Show_Book():
         df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
         df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
 
-        condition1 = df_rent["BOOK_ISBN"] == self.isbn
-        condition2 = df_rent["RENT_RETURN_DATE"] == -1
-        df_temp = df_rent[condition1 & condition2] 
+        # self.isbn 값 없을 시 return 0
+        # 삭제를 한 경우 또 삭제를 할 때,
+        try:
+            if self.isbn == "":
+                messagebox.showinfo("도서 정보 삭제 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+                return 0
+            condition1 = df_rent["BOOK_ISBN"] == self.isbn
+            condition2 = df_rent["RENT_RETURN_DATE"] == -1
+            df_temp = df_rent[condition1 & condition2]
+        except:
+            messagebox.showinfo("도서 정보 삭제 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+            return 0
+
 
         if -1 in list(df_temp["RENT_RETURN_DATE"]):
-            delete_title = df_book["BOOK_TITLE"].loc[self.isbn]
-            messagebox.showinfo("도서 정보 삭제 불가", f"{delete_title}({self.isbn})는(은) 이미 대출 중이라 삭제할 수 없습니다!\n해당 도서를 반납하고 삭제해주세요!")
+            messagebox.showinfo("도서 정보 삭제 불가", f"- 이미 대출 중인 도서 입니다.\n- {self.title}({self.isbn})를 먼저 반납해주세요!", icon='error')
             return 0
         df_book = df_book.drop(self.isbn)
-
+        self.isbn = ""
+        
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
@@ -473,6 +481,7 @@ class Panel_Show_Book():
         self.book_editor.entry_price.delete("0","end")
         self.book_editor.entry_link.delete("0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
+        self.book_editor.label_image.place_forget()
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
@@ -504,6 +513,13 @@ class Panel_Show_Book():
 
     # 멤버 메소드: 도서 정보 [수정] 버튼 이벤트
     def event_book_save(self):
+        try:
+            if self.isbn == "":
+                messagebox.showinfo("도서 정보 수정 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+                return 0
+        except:
+            messagebox.showinfo("도서 정보 수정 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
+            return 0
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949', dtype= {"BOOK_TITLE":object, "BOOK_AUTHOR":object, \
             "BOOK_PUB":object, "BOOK_DESCRIPTION": object, "BOOK_LINK": object})
 
