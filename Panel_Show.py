@@ -21,7 +21,7 @@ BTN_WIDTH = 75
 IMG_WIDTH = 120
 IMG_HEIGHT = 160
 
-INFO_BTN_Y = 310
+INFO_BTN_Y = 315
 LABEL_FOR_TABLE_Y = 340
 
 DIR_CSV_USER = "csv/user.csv"
@@ -414,7 +414,7 @@ class Panel_Show_Book():
             self.book_editor.entry_author.delete("0","end")
             self.book_editor.entry_publisher.delete("0","end")
             self.book_editor.entry_price.delete("0","end")
-            self.book_editor.entry_link.delete("0","end")
+            self.book_editor.entry_link.delete("1.0","end")
             self.book_editor.entry_book_explain.delete("1.0", "end")
 
             # 도서 정보 검색
@@ -437,7 +437,7 @@ class Panel_Show_Book():
             self.book_editor.entry_author.insert("0",self.author)
             self.book_editor.entry_publisher.insert("0",self.publisher)
             self.book_editor.entry_price.insert("0",self.price)
-            self.book_editor.entry_link.insert("0",self.link)
+            self.book_editor.entry_link.insert("1.0",self.link)
             self.book_editor.entry_book_explain.insert("1.0",self.book_explain)
             self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.book_editor.label_image.image = self.image_tk
@@ -483,7 +483,7 @@ class Panel_Show_Book():
         self.book_editor.entry_author.delete("0","end")
         self.book_editor.entry_publisher.delete("0","end")
         self.book_editor.entry_price.delete("0","end")
-        self.book_editor.entry_link.delete("0","end")
+        self.book_editor.entry_link.delete("1.0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
         self.book_editor.label_image.place_forget()
 
@@ -496,7 +496,7 @@ class Panel_Show_Book():
         self.book_editor.entry_author.delete("0","end")
         self.book_editor.entry_publisher.delete("0","end")
         self.book_editor.entry_price.delete("0","end")
-        self.book_editor.entry_link.delete("0","end")
+        self.book_editor.entry_link.delete("1.0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
 
         # 도서 정보 출력
@@ -510,7 +510,7 @@ class Panel_Show_Book():
             self.book_editor.entry_author.insert("0",self.author)
             self.book_editor.entry_publisher.insert("0",self.publisher)
             self.book_editor.entry_price.insert("0",self.price)
-            self.book_editor.entry_link.insert("0",self.link)
+            self.book_editor.entry_link.insert("1.0",self.link)
             self.book_editor.entry_book_explain.insert("1.0",self.book_explain)
             self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.book_editor.label_image.image = self.image_tk

@@ -94,10 +94,10 @@ class Window_Add_Book():
             self.window.destroy()
         self.book_editor = Panel_Edit_Book(self.window, x=140, y=10)   # 도서 Edit 패널을 윈도우에 포함시킴
         self.button_check = Button(self.window,text="확인",width=7, command=self.add_book)  # [확인] 버튼 이벤트 추가
-        self.button_check.place(x=240,y=240)
+        self.button_check.place(x=240,y=250)
         self.button_cancel = Button(self.window,text="취소",width=7)
         self.button_cancel.bind("<ButtonRelease-1>",func_exit)
-        self.button_cancel.place(x=320,y=240)
+        self.button_cancel.place(x=320,y=250)
         
         self.window.mainloop()
 
