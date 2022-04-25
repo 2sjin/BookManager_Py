@@ -397,6 +397,7 @@ class Panel_Show_Book():
 
         user_phone = df_rent["USER_PHONE"].loc[rent_seq]
         user_name = df_user["USER_NAME"].loc[user_phone]
+        
         rent_date = df_rent["RENT_DATE"].loc[rent_seq]
         rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
 
