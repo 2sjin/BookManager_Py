@@ -395,11 +395,13 @@ class Panel_Show_Book():
         except ValueError:
             return 0
 
-        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
-        user_name = df_user["USER_NAME"].loc[user_phone]
-        
-        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
-        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        try:
+            user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+            user_name = df_user["USER_NAME"].loc[user_phone]
+            rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+            rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        except KeyError:
+            return 0
 
         # 대여 중인 도서이면 테이블에 레코드 추가
         if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
