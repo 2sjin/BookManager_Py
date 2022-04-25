@@ -157,7 +157,7 @@ class Panel_Show_User():
 
             self.update_table()     # 대여 중인 도서 목록 새로고침
 
-            messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+            # messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
         except:
             pass
 
@@ -215,6 +215,19 @@ class Panel_Show_User():
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         df_user["USER_REG"].loc[self.phone] = self.user_editor.get_REG()
         user_phone.remove(self.phone)
+
+        df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
+        df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
+
+        # 해당 회원의 도서 대여 이력 중 '대여 중'에 해당하는 이력만 추출
+        condition_filter_isbn = df_rent["USER_PHONE"] == self.phone
+        condition_filter_rented = df_rent["RENT_RETURN_DATE"] == -1
+        df_rent_rented = df_rent[["USER_PHONE"]][condition_filter_isbn & condition_filter_rented]
+
+        if not df_rent_rented.empty and (self.phone != self.user_editor.get_phone()):
+            messagebox.showerror("전화번호 수정 오류", "대여 중인 도서가 있는 회원은 전화번호를 수정할 수 없습니다.", icon='error')
+            return -4
+
         if self.rent_count > 0 and (self.user_editor.get_REG() == False):    # 라디오버튼 '탈퇴'에 체크할 경우에만 조건 확인
             messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
             return 0
@@ -388,10 +401,13 @@ class Panel_Show_Book():
         except ValueError:
             return 0
 
-        user_phone = df_rent["USER_PHONE"].loc[rent_seq]
-        user_name = df_user["USER_NAME"].loc[user_phone]
-        rent_date = df_rent["RENT_DATE"].loc[rent_seq]
-        rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        try:
+            user_phone = df_rent["USER_PHONE"].loc[rent_seq]
+            user_name = df_user["USER_NAME"].loc[user_phone]
+            rent_date = df_rent["RENT_DATE"].loc[rent_seq]
+            rent_due_date = df_rent["RENT_DUE_DATE"].loc[rent_seq]
+        except KeyError:
+            return 0
 
         # 대여 중인 도서이면 테이블에 레코드 추가
         if df_rent["RENT_RETURN_DATE"].loc[rent_seq] == -1:
@@ -535,6 +551,10 @@ class Panel_Show_Book():
         df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949', dtype= {"BOOK_TITLE":object, "BOOK_AUTHOR":object, \
             "BOOK_PUB":object, "BOOK_DESCRIPTION": object, "BOOK_LINK": object})
 
+        df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
+        df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
+
+
         # SettingWithCopyWarning 무시
         pd.set_option('mode.chained_assignment',  None)
 
@@ -546,6 +566,16 @@ class Panel_Show_Book():
         book_link = self.book_editor.get_link()
         book_explain = self.book_editor.get_book_explain()
         book_image_address = "sample_image/"+ISBN+".png"
+
+
+        # 해당 도서의 대여 이력 중 '대여 중'에 해당하는 이력만 추출
+        condition_filter_isbn = df_rent["BOOK_ISBN"] == self.isbn
+        condition_filter_rented = df_rent["RENT_RETURN_DATE"] == -1
+        df_rent_rented = df_rent[["BOOK_ISBN"]][condition_filter_isbn & condition_filter_rented]
+
+        if not df_rent_rented.empty and (int(self.isbn) != int(self.book_editor.get_isbn())):
+            messagebox.showerror("ISBN 수정 오류", "대여 중인 도서는 ISBN을 수정할 수 없습니다.", icon='error')
+            return -4
 
         message = messagebox.askquestion("도서 수정", "{}({})을(를) 수정하시겠습니까?".format(book_title, ISBN))
         if message == "yes":
