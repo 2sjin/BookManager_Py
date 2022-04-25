@@ -423,6 +423,8 @@ class Panel_Show_Book():
             if self.Search.cancel == True:
                 return None
 
+            self.book_editor.label_image.place(x=475+135-135,y=100-5, width=IMG_WIDTH, height=IMG_HEIGHT) 
+
             # self.isbn = int 타입
             self.isbn = self.Search.getTable[0]
             df_book = pd.read_csv(DIR_CSV_BOOK, encoding='CP949')
