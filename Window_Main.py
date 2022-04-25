@@ -60,9 +60,9 @@ class Window_Main():
 
         # 수정 버튼(도서)
         def event_book_modify_button():
-            self.bookinfo.event_book_save()
-            self.userinfo.update_table()
-            self.bookinfo.update_table()
+            if self.bookinfo.event_book_save() != -4:
+                self.userinfo.update_table()
+                self.bookinfo.update_table()
         self.bookinfo.btn_save_book = Button(self.window, text="수정", command=event_book_modify_button)
         self.bookinfo.btn_save_book.place(x=330+BOOK_INFO_X, y=MODIFY_BTN_Y+BOOK_INFO_Y, width=BTN_WIDTH)
 
