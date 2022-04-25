@@ -52,9 +52,10 @@ class Window_Main():
 
         # 수정 버튼(회원)
         def event_user_modify_button():
-            self.userinfo.event_user_save()
-            self.userinfo.update_table()
-            self.bookinfo.update_table()
+            if self.userinfo.event_user_save() != -4:
+                self.userinfo.update_table()
+                self.bookinfo.update_table()
+
         self.userinfo.btn_save_user = Button(self.window, text="수정", command=event_user_modify_button)
         self.userinfo.btn_save_user.place(x=330+10, y=MODIFY_BTN_Y+20, width=BTN_WIDTH)
 
@@ -63,6 +64,7 @@ class Window_Main():
             if self.bookinfo.event_book_save() != -4:
                 self.userinfo.update_table()
                 self.bookinfo.update_table()
+
         self.bookinfo.btn_save_book = Button(self.window, text="수정", command=event_book_modify_button)
         self.bookinfo.btn_save_book.place(x=330+BOOK_INFO_X, y=MODIFY_BTN_Y+BOOK_INFO_Y, width=BTN_WIDTH)
 
@@ -177,6 +179,10 @@ class Window_Main():
         self.userinfo.update_table()
         self.bookinfo.update_table()
 
+        # [원래대로] 버튼 클릭했을 때의 이벤트 실행
+        self.userinfo.event_user_refresh()
+        self.bookinfo.event_book_refresh()
+
         msg = "도서 대여 완료\n"
         msg += f"- {book_title}({book_isbn})\n"
         msg += f"- 대여자: {user_name}({user_phone})"
@@ -223,6 +229,10 @@ class Window_Main():
         # 테이블 새로고침
         self.userinfo.update_table()
         self.bookinfo.update_table()
+
+        # [원래대로] 버튼 클릭했을 때의 이벤트 실행
+        self.userinfo.event_user_refresh()
+        self.bookinfo.event_book_refresh()
 
         # 회원 정보 패널에 대여자(반납자) 정보 출력
         self.userinfo.event_show_return_user(rent_phone)

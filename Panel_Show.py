@@ -150,7 +150,7 @@ class Panel_Show_User():
 
             self.update_table()     # 대여 중인 도서 목록 새로고침
 
-            messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
+            # messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
         except:
             pass
 
@@ -208,6 +208,19 @@ class Panel_Show_User():
         df_user["USER_MAIL"].loc[self.phone] = self.user_editor.get_email()
         df_user["USER_REG"].loc[self.phone] = self.user_editor.get_REG()
         user_phone.remove(self.phone)
+
+        df_rent = pd.read_csv(DIR_CSV_RENT, encoding='CP949', index_col=0)
+        df_rent.index.name = "RENT_SEQ"     # Auto Increment를 인덱스로 하며, 별칭 설정
+
+        # 해당 회원의 도서 대여 이력 중 '대여 중'에 해당하는 이력만 추출
+        condition_filter_isbn = df_rent["USER_PHONE"] == self.phone
+        condition_filter_rented = df_rent["RENT_RETURN_DATE"] == -1
+        df_rent_rented = df_rent[["USER_PHONE"]][condition_filter_isbn & condition_filter_rented]
+
+        if not df_rent_rented.empty and (self.phone != self.user_editor.get_phone()):
+            messagebox.showerror("전화번호 수정 오류", "대여 중인 도서가 있는 회원은 전화번호를 수정할 수 없습니다.", icon='error')
+            return -4
+
         if self.rent_count > 0 and (self.user_editor.get_REG() == False):    # 라디오버튼 '탈퇴'에 체크할 경우에만 조건 확인
             messagebox.showinfo("반납 오류", "반납을 모두 완료하시고 탈퇴를 진행하세요!")
             return 0
