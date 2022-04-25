@@ -146,6 +146,10 @@ class Panel_Show_User():
             else:
                 self.user_editor.registration_rb2.select()
                 
+            df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+            df_user = df_user.set_index(df_user['USER_PHONE'])
+            self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
+
             self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.user_editor.label_image.image = self.photo_tk
 
