@@ -58,8 +58,7 @@ class Panel_Edit_User():
         self.registration_rb2= Radiobutton(window, text="탈퇴(정보 유지)",variable=self.RadioButton_registration,value=False)
         self.registration_rb1.place(x=x+60,y=y+125)
         self.registration_rb2.place(x=x+140,y=y+125)
-        
-
+        self.image_button = 0
         def open_dialog():
             filename = askopenfilename(parent=window,filetypes=(("이미지 파일", IMG_FILE_TYPE),("모든 파일","*.*")))
             try:
@@ -68,6 +67,7 @@ class Panel_Edit_User():
                 photo_tk = ImageTk.PhotoImage(resize_photo,master=window)
                 self.label_image.configure(image=photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
                 self.label_image.image = photo_tk
+                self.image_button = 1
             except:
                 pass
 
@@ -76,6 +76,10 @@ class Panel_Edit_User():
         self.Button_image.place(x=x-130,y=y+160)
 
     # 멤버 메소드: 전화번호 등 회원의 속성 리턴
+    def return_photo(self):
+        return self.photo
+    def return_count(self):
+        return self.image_button
     def get_phone(self):
         return self.entry_phone.get()
     def get_name(self):
