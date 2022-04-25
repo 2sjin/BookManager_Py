@@ -69,8 +69,9 @@ class Panel_Show_User():
         self.btn_refresh_user = Button(window, text="원래대로", command=self.event_user_refresh)
         self.btn_refresh_user.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_user = Button(window, text="수정", command=self.event_user_save)
-        self.btn_save_user.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
+        self.btn_save_user = None
+#        self.btn_save_user = Button(window, text="수정", command=self.event_user_save)
+#        self.btn_save_user.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여중인 도서 목록")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)
@@ -329,8 +330,9 @@ class Panel_Show_Book():
         self.btn_refresh_book = Button(window, text="원래대로", command=self.event_book_refresh)
         self.btn_refresh_book.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_save_book = Button(window, text="수정", command=self.event_book_save)
-        self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
+        self.btn_save_book = None
+        # self.btn_save_book = Button(window, text="수정", command=self.event_book_save)
+        # self.btn_save_book.place(x=x+330, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.label_for_table = Label(text="대여 정보")
         self.label_for_table.place(x=x, y=y+LABEL_FOR_TABLE_Y)

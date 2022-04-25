@@ -9,10 +9,13 @@ from Window_Add import Window_Add_User
 from Window_Add import Window_Add_Book
 from Panel_Show import Panel_Show_Book
 from Panel_Show import Panel_Show_User
+import Panel_Show
 
 BOOK_INFO_X = 475
 BOOK_INFO_Y = 20
 BTN_WIDTH = 75
+
+MODIFY_BTN_Y = 315
 
 DIR_CSV_USER = "csv/user.csv"
 DIR_CSV_BOOK = "csv/book.csv"
@@ -46,6 +49,22 @@ class Window_Main():
 
         self.userinfo = Panel_Show_User(self.window, x=10, y=20)    # 회원 정보 패널 붙이기
         self.bookinfo = Panel_Show_Book(self.window, x=BOOK_INFO_X, y=BOOK_INFO_Y)   # 도서 정보 패널 붙이기
+
+        # 수정 버튼(회원)
+        def event_user_modify_button():
+            self.userinfo.event_user_save()
+            self.userinfo.update_table()
+            self.bookinfo.update_table()
+        self.userinfo.btn_save_user = Button(self.window, text="수정", command=event_user_modify_button)
+        self.userinfo.btn_save_user.place(x=330+10, y=MODIFY_BTN_Y+20, width=BTN_WIDTH)
+
+        # 수정 버튼(도서)
+        def event_book_modify_button():
+            self.bookinfo.event_book_save()
+            self.userinfo.update_table()
+            self.bookinfo.update_table()
+        self.bookinfo.btn_save_book = Button(self.window, text="수정", command=event_book_modify_button)
+        self.bookinfo.btn_save_book.place(x=330+BOOK_INFO_X, y=MODIFY_BTN_Y+BOOK_INFO_Y, width=BTN_WIDTH)
 
         # 대여 버튼
         self.btn_save_book = Button(self.window, text="대여", command=self.event_book_rent)
