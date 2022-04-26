@@ -91,7 +91,7 @@ class Window_Main():
         self.menubar.add_cascade(label="파일", menu=self.menu_1)
 
         # [파일] 메뉴의 하위 항목 추가
-        self.menu_1.add_command(label="프로그램 종료", command=quit)
+        self.menu_1.add_command(label="프로그램 종료", command=exit)
 
         # [신규 데이터 추가] 메뉴 추가
         self.menu_2 = Menu(self.menubar)

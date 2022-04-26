@@ -441,6 +441,7 @@ class Panel_Show_Book():
             df_book.set_index(df_book["BOOK_ISBN"], inplace=True)
 
             # entry 내용 삭제
+            self.entry_search_book.delete("0", "end")
             self.book_editor.entry_isbn.delete("0","end")
             self.book_editor.entry_title.delete("0","end")
             self.book_editor.entry_author.delete("0","end")
