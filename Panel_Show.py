@@ -129,6 +129,9 @@ class Panel_Show_User():
     # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
     def event_user_refresh(self):
         try:
+            df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+            df_user = df_user.set_index(df_user['USER_PHONE'])
+            select_user = df_user.loc[df_user['USER_PHONE']==self.phone]
             self.user_editor.entry_name.delete("0","end")
             self.user_editor.entry_phone.delete("0","end")
             self.user_editor.entry_birthday.delete("0","end")
@@ -145,17 +148,24 @@ class Panel_Show_User():
                 self.user_editor.registration_rb1.select()
             else:
                 self.user_editor.registration_rb2.select()
-                
+
+            # 이미지 원래대로
+            self.select_address = select_user["USER_IMAGE"].loc[self.phone]
+            self.photo = Image.open(self.select_address)
+            resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
+            self.photo_tk = ImageTk.PhotoImage(resize_photo)
+
+            # 회원의 대여 중인 도서 수 불러오기
             df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
             df_user = df_user.set_index(df_user['USER_PHONE'])
             self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
+
 
             self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.user_editor.label_image.image = self.photo_tk
 
             self.update_table()     # 대여 중인 도서 목록 새로고침
 
-            # messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
         except:
             pass
 
@@ -260,7 +270,7 @@ class Panel_Show_User():
         self.birthday = str(self.birthday)
         self.birthday = self.birthday[:4]+"-"+self.birthday[4:6]+"-"+self.birthday[6:]
         self.gender = df_user["USER_SEX"].loc[self.phone]
-        self.mail = df_user["USER_MAIL"].loc[self.phone]
+        self.email = df_user["USER_MAIL"].loc[self.phone]
         self.REG = df_user["USER_REG"].loc[self.phone]
         self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
         address = "sample_image/"+self.phone+".png"
