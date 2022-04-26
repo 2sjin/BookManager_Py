@@ -125,13 +125,13 @@ class Window_Add_Book():
                 return 0
             # ISBN 중복검사를 위한 형식검사 우선
             if not book_isbn.isdigit():
-                messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
+                messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다! (음의 정수 제외)", icon='error')
                 return 0
             if int(book_isbn) in list(df_book['BOOK_ISBN']):
                 messagebox.showinfo("ISBN 중복", "ISBN {}는(은) 이미 등록된 도서입니다.".format(book_isbn), icon='error')
                 return 0
             if not book_price.isdigit():
-                messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
+                messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다! (음의 정수 제외)", icon='error')
                 return 0
         elif str == 'no':
             return 0
