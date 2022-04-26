@@ -426,7 +426,7 @@ class Panel_Show_Book():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
-        try:
+        try:    
             self.Search = Window_Search_Book(self.entry_search_book.get())
 
             # 취소 버튼 눌렀을 때 이벤트
@@ -459,8 +459,8 @@ class Panel_Show_Book():
             self.book_explain = df_book.loc[self.isbn, "BOOK_DESCRIPTION"]
 
             # 도서 이미지 찾기, 조절
-            image = Image.open(self.image_address)
-            reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
+            self.book_editor.image = Image.open(self.image_address)
+            reisze_image = self.book_editor.image.resize((IMG_WIDTH, IMG_HEIGHT))
             self.image_tk = ImageTk.PhotoImage(reisze_image)
 
             # 도서 정보 출력
@@ -475,6 +475,7 @@ class Panel_Show_Book():
             self.book_editor.label_image.image = self.image_tk
             self.update_table()
         except:
+            messagebox.showinfo("도서 정보 검색 오류", "해당 도서는 잘못된 형식입니다!", icon='error')
             pass
 
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
@@ -500,7 +501,6 @@ class Panel_Show_Book():
             messagebox.showinfo("도서 정보 삭제 오류", "도서 정보를 먼저 검색해주세요!", icon='error')
             return 0
 
-
         if -1 in list(df_temp["RENT_RETURN_DATE"]):
             messagebox.showinfo("도서 정보 삭제 불가", f"- 이미 대출 중인 도서 입니다.\n- {self.title}({self.isbn})를 먼저 반납해주세요!", icon='error')
             return 0
@@ -519,7 +519,9 @@ class Panel_Show_Book():
         self.book_editor.entry_book_explain.delete("1.0","end")
         self.book_editor.label_image.place_forget()
         
+        # 이미지 파일 삭제
         remove(self.image_address)
+
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
@@ -581,7 +583,6 @@ class Panel_Show_Book():
         book_explain = self.book_editor.get_book_explain()
         book_image_address = "sample_image/"+ISBN+".png"
 
-
         # 해당 도서의 대여 이력 중 '대여 중'에 해당하는 이력만 추출
         condition_filter_isbn = df_rent["BOOK_ISBN"] == self.isbn
         condition_filter_rented = df_rent["RENT_RETURN_DATE"] == -1
@@ -602,7 +603,7 @@ class Panel_Show_Book():
 
             # ISBN 형식 오류부터 검사해야 중복 검사에서 ISBN을 정수형으로 변환 가능
             if not ISBN.isdigit():
-                messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다!", icon='error')
+                messagebox.showinfo("ISBN 형식 오류", "ISBN은 정수 입력만 가능합니다! (음의 정수 제외)", icon='error')
                 return 0
 
             if self.isbn != int(ISBN):
@@ -611,50 +612,23 @@ class Panel_Show_Book():
                     return 0
 
             if not book_price.isdigit():
-                messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다!", icon='error')
+                messagebox.showinfo("가격 형식 오류", "가격은 정수 입력만 가능합니다! (음의 정수 제외)", icon='error')
                 return 0
         elif message == 'no':
             return 0
 
+        # yes를 눌렀을 때 이미지 처리
+        # (덮어쓰기) or (ISBN 과 파일 변경이 동일한 경우)  
+        resize_image = self.book_editor.image.resize((IMG_WIDTH, IMG_HEIGHT))
+        self.image_tk = ImageTk.PhotoImage(resize_image)
+        self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
+        self.book_editor.label_image.image = self.image_tk
+        self.book_editor.image.save(book_image_address, "png")        
+        # (파일 이름 변경) or (파일 이름 변경 + 파일 이미지 변경)
         if self.isbn == int(ISBN):
-            # (덮어쓰기)
-            try:
-                self.book_editor.image.save(book_image_address, "gif")
-                image = Image.open(book_image_address)    
-                resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-                self.image_tk = ImageTk.PhotoImage(resize_image)
-                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-                self.book_editor.label_image.image = self.image_tk
-            # (ISBN 과 파일 변경이 동일한 경우)            
-            except:
-                # 파일 ISBN, 사진 그대로 저장
-                image = Image.open(self.image_address)
-                image.save(book_image_address, "gif") # (덮어쓰기)
-                reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-                self.image_tk = ImageTk.PhotoImage(reisze_image)
-                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-                self.book_editor.label_image.image = self.image_tk
-        else:
-            try:
-                # ISBN, 파일 모두 변경
-                self.book_editor.image.save(book_image_address, "png")
-                image = Image.open(book_image_address)
-                # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임.
-                resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-                # 이미지 -> 원래대로를 위한 변경
-                self.image_tk = ImageTk.PhotoImage(resize_image)
-                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-                self.book_editor.label_image.image = self.image_tk
-                remove(self.image_address)
-            except:
-                image = Image.open(self.image_address)     
-                image.save(book_image_address, "png")
-                image = Image.open(book_image_address)
-                reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
-                self.image_tk = ImageTk.PhotoImage(reisze_image)
-                self.book_editor.label_image.configure(image=self.image_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
-                self.book_editor.label_image.image = self.image_tk
-                remove(self.image_address)
+            # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임
+            # 이전 이미지 파일 삭제
+            remove(self.image_address)
 
         ISBN = int(ISBN)
         book_price = int(book_price)
@@ -681,7 +655,6 @@ class Panel_Show_Book():
         self.book_explain = book_explain
         self.link = book_link
         self.image_address = book_image_address
-
         messagebox.showinfo("도서 수정 완료", "도서 정보를 수정하였습니다.")
 
     # 멤버 메소드: ISBN 리턴
