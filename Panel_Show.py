@@ -509,8 +509,6 @@ class Panel_Show_Book():
         
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 
-        messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
-
         # entry 내용 삭제
         self.book_editor.entry_isbn.delete("0","end")
         self.book_editor.entry_title.delete("0","end")
@@ -520,6 +518,9 @@ class Panel_Show_Book():
         self.book_editor.entry_link.delete("1.0","end")
         self.book_editor.entry_book_explain.delete("1.0","end")
         self.book_editor.label_image.place_forget()
+        
+        remove(self.image_address)
+        messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
     # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
     def event_book_refresh(self):
@@ -536,6 +537,9 @@ class Panel_Show_Book():
         # 도서 정보 출력
         # 아무 검색 하지않고 원래대로 버튼 클릭시 오류 수정
         try:
+            # 도서 삭제후 원래대로 버튼 클릭시 오류 수정
+            if self.isbn == "":
+                return 0
             self.book_editor.entry_isbn.insert("0", self.isbn)
             self.book_editor.entry_title.insert("0",self.title)
             self.book_editor.entry_author.insert("0",self.author)
@@ -633,7 +637,7 @@ class Panel_Show_Book():
         else:
             try:
                 # ISBN, 파일 모두 변경
-                self.book_editor.image.save(book_image_address, "gif")
+                self.book_editor.image.save(book_image_address, "png")
                 image = Image.open(book_image_address)
                 # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임.
                 resize_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
@@ -644,7 +648,7 @@ class Panel_Show_Book():
                 remove(self.image_address)
             except:
                 image = Image.open(self.image_address)     
-                image.save(book_image_address, "gif")
+                image.save(book_image_address, "png")
                 image = Image.open(book_image_address)
                 reisze_image = image.resize((IMG_WIDTH, IMG_HEIGHT))
                 self.image_tk = ImageTk.PhotoImage(reisze_image)
