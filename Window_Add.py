@@ -72,6 +72,7 @@ class Window_Add_User():
             df_user = pd.concat([df_user,new_user])
             df_user = df_user.set_index(df_user['USER_PHONE'])
             df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
+            messagebox.showinfo("신규 회원 추가 완료", f"{user_name}({user_phone})이 등록되었습니다.")
             self.window.quit()
             self.window.destroy()
             
@@ -151,7 +152,7 @@ class Window_Add_Book():
         # 추가하는 데이터를 포함한 모든 ISBN이 실수형으로 처리되는 문제 발생
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
-        messagebox.showinfo("새 도서 추가 완료", "ISBN {}이 등록되었습니다.".format(book_isbn))
+        messagebox.showinfo("신규 도서 추가 완료", f"{book_title}({book_isbn})이 등록되었습니다.")
         self.window.quit()
         self.window.destroy()
 # ========================================================================================================
