@@ -426,7 +426,7 @@ class Panel_Show_Book():
 
     # 멤버 메소드: [검색] 버튼 이벤트: 도서 검색 결과 윈도우 띄우기
     def event_book_search(self):
-        try:    
+        try:
             self.Search = Window_Search_Book(self.entry_search_book.get())
 
             # 취소 버튼 눌렀을 때 이벤트
@@ -475,7 +475,7 @@ class Panel_Show_Book():
             self.book_editor.label_image.image = self.image_tk
             self.update_table()
         except:
-            messagebox.showinfo("도서 정보 검색 오류", "해당 도서는 잘못된 형식입니다!", icon='error')
+            messagebox.showinfo("도서 정보 검색 오류", "- 비정상적인 접근으로 인해 해당 도서 정보를 검색할 수 없습니다.", icon='error')
             pass
 
     # 멤버 메소드: 도서 정보 [삭제] 버튼 이벤트
@@ -625,7 +625,7 @@ class Panel_Show_Book():
         self.book_editor.label_image.image = self.image_tk
         self.book_editor.image.save(book_image_address, "png")        
         # (파일 이름 변경) or (파일 이름 변경 + 파일 이미지 변경)
-        if self.isbn == int(ISBN):
+        if self.isbn != int(ISBN):
             # 만약 ISBN이 이전과 다르면 새로운 이름을 가진 파일이 추가되었을거임
             # 이전 이미지 파일 삭제
             remove(self.image_address)
