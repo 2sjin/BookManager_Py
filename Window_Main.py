@@ -133,7 +133,7 @@ class Window_Main():
             book_isbn = self.bookinfo.isbn
             book_title = df_book["BOOK_TITLE"].loc[book_isbn]
         except ValueError:
-            messagebox.showinfo("도서 대여", f"도서 ISBN이 입력되지 않았습니다.")
+            messagebox.showinfo("도서 대여", f"도서 ISBN을 올바르게 입력하지 않았거나, 확인 도중 오류가 발생하였습니다.")
             return -3
         except KeyError:
             messagebox.showinfo("도서 대여", f"ISBN {book_isbn} 도서를 찾을 수 없습니다.")
@@ -204,7 +204,7 @@ class Window_Main():
             rent_seq = max(df_rent[df_rent["BOOK_ISBN"] == book_isbn].index)
             rent_phone = df_rent["USER_PHONE"].loc[rent_seq]
         except ValueError:
-            messagebox.showinfo("도서 반납", f"도서 ISBN이 입력되지 않았습니다.")
+            messagebox.showinfo("도서 반납", f"도서 ISBN을 올바르게 입력하지 않았거나, 확인 도중 오류가 발생하였습니다.")
             return -3
         except KeyError:
             messagebox.showinfo("도서 반납", f"ISBN {book_isbn} 도서를 찾을 수 없습니다.")

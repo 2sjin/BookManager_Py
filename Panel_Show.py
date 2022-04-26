@@ -148,16 +148,24 @@ class Panel_Show_User():
                 self.user_editor.registration_rb1.select()
             else:
                 self.user_editor.registration_rb2.select()
+
+            # 이미지 원래대로
             self.select_address = select_user["USER_IMAGE"].loc[self.phone]
             self.photo = Image.open(self.select_address)
             resize_photo = self.photo.resize((IMG_WIDTH, IMG_HEIGHT))
             self.photo_tk = ImageTk.PhotoImage(resize_photo)
+
+            # 회원의 대여 중인 도서 수 불러오기
+            df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
+            df_user = df_user.set_index(df_user['USER_PHONE'])
+            self.rent_count = df_user["USER_RENT_CNT"].loc[self.phone]
+
+
             self.user_editor.label_image.configure(image=self.photo_tk, width=IMG_WIDTH, height=IMG_HEIGHT)
             self.user_editor.label_image.image = self.photo_tk
 
             self.update_table()     # 대여 중인 도서 목록 새로고침
 
-            # messagebox.showinfo("원래대로", "회원 정보가 원상복구되었습니다.")
         except:
             pass
 
@@ -424,6 +432,8 @@ class Panel_Show_Book():
             # 취소 버튼 눌렀을 때 이벤트
             if self.Search.cancel == True:
                 return None
+
+            self.book_editor.label_image.place(x=475+135-135,y=100-5, width=IMG_WIDTH, height=IMG_HEIGHT) 
 
             # self.isbn = int 타입
             self.isbn = self.Search.getTable[0]
