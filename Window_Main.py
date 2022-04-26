@@ -179,7 +179,7 @@ class Window_Main():
         self.userinfo.update_table()
         self.bookinfo.update_table()
 
-        # [원래대로] 버튼 클릭했을 때의 이벤트 실행
+        # [새로고침] 버튼 클릭했을 때의 이벤트 실행
         self.userinfo.event_user_refresh()
         self.bookinfo.event_book_refresh()
 
@@ -230,7 +230,7 @@ class Window_Main():
         self.userinfo.update_table()
         self.bookinfo.update_table()
 
-        # [원래대로] 버튼 클릭했을 때의 이벤트 실행
+        # [새로고침] 버튼 클릭했을 때의 이벤트 실행
         self.userinfo.event_user_refresh()
         self.bookinfo.event_book_refresh()
 

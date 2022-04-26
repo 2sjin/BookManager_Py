@@ -67,7 +67,7 @@ class Panel_Show_User():
         self.btn_search_user = Button(window, text="검색", command=self.event_user_search)
         self.btn_search_user.place(x=x+SEARCH_ENTRY_WIDTH+10, y=y+30, width=SEARCH_BTN_WIDTH, height=SEARCH_HEIGHT)
 
-        self.btn_refresh_user = Button(window, text="원래대로", command=self.event_user_refresh)
+        self.btn_refresh_user = Button(window, text="새로고침", command=self.event_user_refresh)
         self.btn_refresh_user.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.btn_save_user = None
@@ -126,7 +126,7 @@ class Panel_Show_User():
         
         
 
-    # 멤버 메소드: 회원 정보 [원래대로] 버튼 이벤트
+    # 멤버 메소드: 회원 정보 [새로고침] 버튼 이벤트
     def event_user_refresh(self):
         try:
             df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
@@ -261,7 +261,7 @@ class Panel_Show_User():
         # 이미지 파일 저장("전화번호.png")
         df_user["USER_IMAGE"].loc[self.phone] = address
         df_user.to_csv(DIR_CSV_USER, index=False, encoding='CP949')
-     # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [원래대로] 버튼을 눌렀을 때 수정한 정보 반영하기 위함)
+     # 수정한 회원 정보를 임시 변수에 저장([수정] 후 [새로고침] 버튼을 눌렀을 때 수정한 정보 반영하기 위함)
         df_user = pd.read_csv(DIR_CSV_USER, encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         self.phone = self.user_editor.get_phone()
@@ -358,7 +358,7 @@ class Panel_Show_Book():
         self.btn_delete_book = Button(window, text="삭제", command=self.event_book_delete)
         self.btn_delete_book.place(x=x+150, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
-        self.btn_refresh_book = Button(window, text="원래대로", command=self.event_book_refresh)
+        self.btn_refresh_book = Button(window, text="새로고침", command=self.event_book_refresh)
         self.btn_refresh_book.place(x=x+240, y=y+INFO_BTN_Y, width=BTN_WIDTH)
 
         self.btn_save_book = None
@@ -524,7 +524,7 @@ class Panel_Show_Book():
 
         messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
 
-    # 멤버 메소드: 도서 정보 [원래대로] 버튼 이벤트
+    # 멤버 메소드: 도서 정보 [새로고침] 버튼 이벤트
     def event_book_refresh(self):
 
         # entry 내용 삭제
@@ -537,9 +537,9 @@ class Panel_Show_Book():
         self.book_editor.entry_book_explain.delete("1.0","end")
 
         # 도서 정보 출력
-        # 아무 검색 하지않고 원래대로 버튼 클릭시 오류 수정
+        # 아무 검색 하지않고 새로고침 버튼 클릭시 오류 수정
         try:
-            # 도서 삭제후 원래대로 버튼 클릭시 오류 수정
+            # 도서 삭제후 새로고침 버튼 클릭시 오류 수정
             if self.isbn == "":
                 return 0
             self.book_editor.entry_isbn.insert("0", self.isbn)
@@ -646,7 +646,7 @@ class Panel_Show_Book():
 
         df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
         
-        # 저장 -> 원래대로
+        # 저장 -> 새로고침
         self.isbn = ISBN
         self.title = book_title
         self.author = book_author
