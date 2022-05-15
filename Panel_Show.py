@@ -504,25 +504,33 @@ class Panel_Show_Book():
         if -1 in list(df_temp["RENT_RETURN_DATE"]):
             messagebox.showinfo("도서 정보 삭제 불가", f"- 이미 대출 중인 도서 입니다.\n- {self.title}({self.isbn})를 먼저 반납해주세요!", icon='error')
             return 0
-        df_book = df_book.drop(self.isbn)
-        self.isbn = ""
-        
-        df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
 
-        # entry 내용 삭제
-        self.book_editor.entry_isbn.delete("0","end")
-        self.book_editor.entry_title.delete("0","end")
-        self.book_editor.entry_author.delete("0","end")
-        self.book_editor.entry_publisher.delete("0","end")
-        self.book_editor.entry_price.delete("0","end")
-        self.book_editor.entry_link.delete("1.0","end")
-        self.book_editor.entry_book_explain.delete("1.0","end")
-        self.book_editor.label_image.place_forget()
-        
-        # 이미지 파일 삭제
-        remove(self.image_address)
+        message = messagebox.askquestion("도서 삭제", "{}({})을(를) 삭제하시겠습니까?".format(self.title, self.isbn))
+        if message == "yes":
 
-        messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
+            df_book = df_book.drop(self.isbn)
+            self.isbn = ""
+            
+            df_book.to_csv(DIR_CSV_BOOK, index=False, encoding='CP949')
+
+            # entry 내용 삭제
+            self.book_editor.entry_isbn.delete("0","end")
+            self.book_editor.entry_title.delete("0","end")
+            self.book_editor.entry_author.delete("0","end")
+            self.book_editor.entry_publisher.delete("0","end")
+            self.book_editor.entry_price.delete("0","end")
+            self.book_editor.entry_link.delete("1.0","end")
+            self.book_editor.entry_book_explain.delete("1.0","end")
+            self.book_editor.label_image.place_forget()
+            
+            # 이미지 파일 삭제
+            remove(self.image_address)
+
+            messagebox.showinfo("도서 정보 삭제 완료", "도서 정보를 삭제하였습니다.")
+            return 0
+
+        else:
+            return 0
 
     # 멤버 메소드: 도서 정보 [새로고침] 버튼 이벤트
     def event_book_refresh(self):
